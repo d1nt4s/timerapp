@@ -1,14 +1,15 @@
 package main
 
 import (
-	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/widget"
+	"fmt"
+	"time"
 )
 
 func main() {
-	a := app.New()
-	w := a.NewWindow("Hello World")
-
-	w.SetContent(widget.NewLabel("Hello World!"))
-	w.ShowAndRun()
+	var timer Timer
+	timer.setup(0, 15)
+	for timer.decrementSec() != End {
+		fmt.Printf("Minutes: %d, Seconds: %d \r", timer.minutes, timer.seconds)
+		time.Sleep(time.Second)
+	}
 }
