@@ -6,16 +6,19 @@ import (
 	"github.com/chzyer/readline"
 )
 
-func scan_command(control chan string) {
+func createReadline() (*readline.Instance, error) {
 	rl, err := readline.NewEx(&readline.Config{
 		Prompt:          "> ",
-		HistoryFile:     "/tmp/readline.tmp",
 		InterruptPrompt: "^C",
+		EOFPrompt:       "exit",
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	defer rl.Close()
+	return rl, nil
+}
+
+func scan_command(rl *readline.Instance, control chan string) {
 
 	for {
 		line, err := rl.Readline()
