@@ -1,15 +1,10 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
-
 func main() {
 	var timer Timer
+	timer.control = make(chan string)
 	timer.setup(0, 15)
-	for timer.decrementSec() != End {
-		fmt.Printf("Minutes: %d, Seconds: %d \r", timer.minutes, timer.seconds)
-		time.Sleep(time.Second)
-	}
+	go scan_command(timer.control);
+	timer.status = Continue  
+	timer.run()
 }
