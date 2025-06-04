@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -32,6 +33,7 @@ func (t *Timer) decrementSec() {
 	if t.seconds == 0 {
 		if t.minutes == 0 {
 			t.status = End
+			return
 		}
 		t.minutes--
 		t.seconds = 60
@@ -40,11 +42,15 @@ func (t *Timer) decrementSec() {
 	t.status = Continue
 }
 
-func (t *Timer) run(rl *readline.Instance) {
+func (t *Timer) run(ctx context.Context, cancel context.CancelFunc, rl *readline.Instance) {
 	for {
 		t.manage(rl)
 
 		if t.status == End {
+			fmt.Println("o")
+			// rl.Close()
+			cancel()
+			fmt.Println("s")
 			return
 		}
 
@@ -71,7 +77,7 @@ func (t *Timer) manage(rl *readline.Instance) {
 			t.status = End
 			rl.Write([]byte("\n Таймер остановлен\n"))
 		case "reset":
-			t.setup(0, 0)
+			t.setup(0, 15)
 			rl.Write([]byte("\n🔁 Таймер сброшен\n"))
 		case "pause":
 			t.status = Pause
@@ -80,8 +86,8 @@ func (t *Timer) manage(rl *readline.Instance) {
 			t.status = Continue
 			rl.Write([]byte("\n▶️ Таймер продолжается\n"))
 		case "exit":
+			fmt.Println("t")
 			t.status = End
-			t.done <- true
 		default:
 			rl.Write([]byte(fmt.Sprintf("\n🤷 Неизвестная команда: %s\n", cmd)))
 		}

@@ -1,7 +1,11 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"strings"
+
+	// "sync"
 
 	"github.com/chzyer/readline"
 )
@@ -18,26 +22,27 @@ func createReadline() (*readline.Instance, error) {
 	return rl, nil
 }
 
-func scan_command(rl *readline.Instance, control chan string) {
+// func scan_command(rl *readline.Instance, control chan string, done <-chan bool, wg *sync.WaitGroup) {
+func scan_command(ctx context.Context, rl *readline.Instance, control chan string) {
+	// defer wg.Done()
 
 	for {
-		line, err := rl.Readline()
-		if err != nil {
-			break // например, ^D
-		}
-		cmd := strings.ToLower(strings.TrimSpace(line))
-		control <- cmd
-		if cmd == "exit" {
-			break
+		// Создаём select, чтобы слушать и ввод, и завершение
+		select {
+		case <-ctx.Done():
+			fmt.Println("scancommand gets")
+			return // безопасный выход
+		default:
+			line, err := rl.Readline()
+			if err != nil {
+				return // ^D или закрытие
+			}
+			cmd := strings.ToLower(strings.TrimSpace(line))
+			control <- cmd
+			if cmd == "exit" {
+				return
+			}
 		}
 	}
-
-	// scanner := bufio.NewScanner(os.Stdin)
-	// for scanner.Scan() {
-	// 	cmd := strings.ToLower(scanner.Text())
-	// 	control <- cmd
-	// 	if cmd == "exit" {
-	// 		break
-	// 	}
-	// }
 }
+

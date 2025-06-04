@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sync"
+	"context"
+)
 
 func main() {
 	var timer Timer
@@ -8,15 +12,29 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer rl.Close()
+
+    ctx, cancel := context.WithCancel(context.Background())
+    defer cancel()
+
+	var wg sync.WaitGroup
+	wg.Add(2)
 
 	timer.control = make(chan string)
-	timer.done = make(chan bool)
-	timer.setup(0, 15)
-	go scan_command(rl, timer.control)
+	timer.setup(1, 0)
 	timer.status = Continue
-	timer.run(rl)
 
-	<-timer.done
+	go func() {
+        defer wg.Done()
+	// go scan_command(rl, timer.control, timer.done)
+        scan_command(ctx, rl, timer.control)
+    }()
+
+    go func() {
+        defer wg.Done()
+        timer.run(ctx, cancel, rl)
+    }()
+
+	wg.Wait()
+	_ = rl.Close()
 	fmt.Println("👋 Программа завершена.")
 }
