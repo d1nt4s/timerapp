@@ -24,13 +24,19 @@ func main() {
 	timer.status = Continue
 
 	go func() {
-        defer wg.Done()
+		defer func() {
+			fmt.Println("🟢 scan_command завершается")
+			wg.Done()
+		}()
 	// go scan_command(rl, timer.control, timer.done)
         scan_command(ctx, rl, timer.control)
     }()
 
     go func() {
-        defer wg.Done()
+		defer func() {
+			fmt.Println("🟢 timer.run завершается")
+			wg.Done()
+		}()
         timer.run(ctx, cancel, rl)
     }()
 

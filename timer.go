@@ -12,7 +12,6 @@ type Timer struct {
 	seconds int
 	minutes int
 	control chan string
-	done chan bool
 	status Status
 }
 
@@ -47,10 +46,7 @@ func (t *Timer) run(ctx context.Context, cancel context.CancelFunc, rl *readline
 		t.manage(rl)
 
 		if t.status == End {
-			fmt.Println("o")
-			// rl.Close()
 			cancel()
-			fmt.Println("s")
 			return
 		}
 

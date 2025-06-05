@@ -38,7 +38,9 @@ func scan_command(ctx context.Context, rl *readline.Instance, control chan strin
 				return // ^D или закрытие
 			}
 			cmd := strings.ToLower(strings.TrimSpace(line))
+			fmt.Println("⏳ Перед отправкой команды в канал")
 			control <- cmd
+			fmt.Println("⏳ Перед отправкой команды в канал")
 			if cmd == "exit" {
 				return
 			}
