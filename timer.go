@@ -52,6 +52,7 @@ func (t *Timer) run(cancel context.CancelFunc) {
 					break Drain
 				}
 			}
+			fmt.Println() 
 			cancel()
 			return
 		}
@@ -62,7 +63,8 @@ func (t *Timer) run(cancel context.CancelFunc) {
 		}
 
 		t.decrementSec()
-		fmt.Printf("\033[1A\033[2K⏳ Осталось: %d мин %02d сек\n", t.minutes, t.seconds)
+		// fmt.Printf("\033[1A\033[2K⏳ Осталось: %d мин %02d сек\n", t.minutes, t.seconds)
+		fmt.Printf("\r⏳ Осталось: %d мин %02d сек", t.minutes, t.seconds)
 
 		time.Sleep(time.Second)
 	}

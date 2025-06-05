@@ -24,14 +24,27 @@ func setupScreen() tcell.Screen {
 func scan_command(ctx context.Context, screen tcell.Screen, control chan string) {
 
 	var buffer []rune
+	eventChan := make(chan tcell.Event)
+
+	// Горутинa, чтобы проксировать события
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				event := screen.PollEvent()
+				eventChan <- event
+			}
+		}
+	}()
 
 	for {
 		select {
 		case <-ctx.Done():
 			fmt.Println("scan_command: ctx.Done")
 			return // безопасный выход
-		default:
-			ev := screen.PollEvent()
+		case ev := <-eventChan:
 			switch ev := ev.(type) {
 			case *tcell.EventKey:
 				switch ev.Key() {
@@ -52,12 +65,16 @@ func scan_command(ctx context.Context, screen tcell.Screen, control chan string)
 					if len(buffer) > 0 {
 						buffer = buffer[:len(buffer)-1]
 					}
+				case tcell.KeyCtrlC:
+					return
 				default:
 					r := ev.Rune()
 					if r != 0 {
 						buffer = append(buffer, r)
 					}
 				}
+			case *tcell.EventResize:
+				screen.Sync()
 			}
 		}
 	}

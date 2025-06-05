@@ -1,9 +1,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"sync"
-	"context"
+	"time"
 )
 
 func main() {
@@ -19,7 +20,7 @@ func main() {
 	wg.Add(2)
 
 	timer.control = make(chan string)
-	timer.setup(1, 0)
+	timer.setup(5, 0)
 	timer.status = Continue
 
 	go func() {
@@ -40,4 +41,6 @@ func main() {
 
 	wg.Wait()
 	fmt.Println("👋 Программа завершена.")
+
+	time.Sleep(time.Second * 10)
 }
