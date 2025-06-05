@@ -42,25 +42,25 @@ func scan_command(ctx context.Context, screen tcell.Screen, control chan string)
 	for {
 		select {
 		case <-ctx.Done():
-			fmt.Println("scan_command: ctx.Done")
-			return // безопасный выход
+			drawMessage(screen, "scan_command: ctx.Done", 6, tcell.StyleDefault.Foreground(tcell.ColorRed))
+			return 
 		case ev := <-eventChan:
 			switch ev := ev.(type) {
 			case *tcell.EventKey:
 				switch ev.Key() {
 				case tcell.KeyEnter:
 					line := string(buffer)
-					fmt.Println("scan_command: Введена строка:", line)
+					// fmt.Println("scan_command: Введена строка:", line)
 
 					cmd := strings.ToLower(strings.TrimSpace(line))
-					fmt.Println("scan_command: scan⏳ Перед отправкой команды в канал")
+					drawMessage(screen, "scan_command: scan⏳ Перед отправкой команды в канал", 7, tcell.StyleDefault.Foreground(tcell.ColorRed))
 					control <- cmd
-					fmt.Println("scan_command: ⏳ Перед отправкой команды в канал")
+					drawMessage(screen, "scan_command: ⏳ Перед отправкой команды в канал", 8, tcell.StyleDefault.Foreground(tcell.ColorRed))
 					if cmd == "exit" {
 						return
 					}
 
-					buffer = nil // очистить буфер
+					buffer = nil 
 				case tcell.KeyBackspace:
 					if len(buffer) > 0 {
 						buffer = buffer[:len(buffer)-1]

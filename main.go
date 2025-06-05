@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"time"
+	"github.com/gdamore/tcell/v2"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 
 	go func() {
 		defer func() {
-			fmt.Println("🟢 scan_command завершается")
+			drawMessage(screen, "🟢 scan_command завершается", 2, tcell.StyleDefault.Foreground(tcell.ColorRed))
 			wg.Done()
 		}()
         scan_command(ctx, screen, timer.control)
@@ -33,14 +33,14 @@ func main() {
 
     go func() {
 		defer func() {
-			fmt.Println("🟢 timer.run завершается")
+			drawMessage(screen, "🟢 timer.run завершается", 3, tcell.StyleDefault.Foreground(tcell.ColorRed))
 			wg.Done()
 		}()
-        timer.run(cancel)
+        timer.run(cancel, screen)
     }()
 
 	wg.Wait()
-	fmt.Println("👋 Программа завершена.")
+	drawMessage(screen, "👋 Программа завершена.", 5, tcell.StyleDefault.Foreground(tcell.ColorRed))
 
 	time.Sleep(time.Second * 10)
 }

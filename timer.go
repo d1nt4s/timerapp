@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"time"
+    "github.com/mattn/go-runewidth"
+	"github.com/gdamore/tcell/v2"
 )
 
 type Timer struct {
@@ -39,9 +41,10 @@ func (t *Timer) decrementSec() {
 	t.status = Continue
 }
 
-func (t *Timer) run(cancel context.CancelFunc) {
+func (t *Timer) run(cancel context.CancelFunc, s tcell.Screen) {
+
 	for {
-		t.manage()
+		t.manage(s)
 
 		if t.status == End {
 		Drain:
@@ -63,36 +66,95 @@ func (t *Timer) run(cancel context.CancelFunc) {
 		}
 
 		t.decrementSec()
-		// fmt.Printf("\033[1A\033[2K⏳ Осталось: %d мин %02d сек\n", t.minutes, t.seconds)
-		fmt.Printf("\r⏳ Осталось: %d мин %02d сек", t.minutes, t.seconds)
+		drawRemainingTime(s, t.minutes, t.seconds, 0, tcell.StyleDefault.Foreground(tcell.ColorWhite))
 
 		time.Sleep(time.Second)
 	}
 }
 
-func (t *Timer) manage() {
+
+func (t *Timer) manage(screen tcell.Screen) {
 	select {
 	case cmd := <-t.control:
 		switch cmd {
 		case "stop":
 			t.setup(0, 0)
 			t.status = End
-			fmt.Printf("\n Таймер остановлен\n")
+			drawMessage(screen, "Таймер остановлен", 4, tcell.StyleDefault.Foreground(tcell.ColorRed))
 		case "reset":
 			t.setup(0, 15)
-			fmt.Printf("\n🔁 Таймер сброшен\n")
+			drawMessage(screen, "🔁 Таймер сброшен", 4, tcell.StyleDefault.Foreground(tcell.ColorRed))
 		case "pause":
 			t.status = Pause
-			fmt.Printf("\n⏸ Таймер на паузе\n")
+			drawMessage(screen, "⏸ Таймер на паузе", 4, tcell.StyleDefault.Foreground(tcell.ColorRed))
 		case "resume":
 			t.status = Continue
-			fmt.Printf("\n▶️ Таймер продолжается\n")
+			drawMessage(screen, "▶️ Таймер продолжается", 4, tcell.StyleDefault.Foreground(tcell.ColorRed))
 		case "exit":
-			fmt.Println("t")
 			t.status = End
 		default:
-			fmt.Printf("\n🤷 Неизвестная команда: %s\n", cmd)
+			drawFormattedMessage(screen, 4, tcell.StyleDefault.Foreground(tcell.ColorYellow), "🤷 Неизвестная команда: %s", cmd)
+
 		}
 	default:
 	}
+}
+
+func drawRemainingTime(s tcell.Screen, tMin, tSec int, y int, style tcell.Style) {
+    // 1. Формируем строку
+    msg := fmt.Sprintf("⏳ Осталось: %d мин %02d сек", tMin, tSec)
+
+    // 2. Очищаем старую строку (на всякий случай)
+    w, _ := s.Size()
+    for x := 0; x < w; x++ {
+        s.SetContent(x, y, ' ', nil, style)
+    }
+
+    // 3. Выводим посимвольно
+    x := 0
+    for _, ch := range msg {
+        s.SetContent(x, y, ch, nil, style)
+        x += runewidth.RuneWidth(ch)
+    }
+
+    // 4. Отображаем на экране
+    s.Show()
+}
+
+func drawMessage(s tcell.Screen, msg string, y int, style tcell.Style) {
+    // Очистим всю строку перед выводом, чтобы не было "хвостов"
+    w, _ := s.Size()
+    for x := 0; x < w; x++ {
+        s.SetContent(x, y, ' ', nil, style)
+    }
+
+    // Выводим сообщение посимвольно
+    x := 0
+    for _, ch := range msg {
+        s.SetContent(x, y, ch, nil, style)
+        x += runewidth.RuneWidth(ch)
+    }
+
+    s.Show()
+}
+
+func drawFormattedMessage(s tcell.Screen, y int, style tcell.Style, format string, args ...interface{}) {
+    // 1. Формируем строку, как в fmt.Printf
+    msg := fmt.Sprintf(format, args...)
+
+    // 2. Очищаем строку от старого текста
+    w, _ := s.Size()
+    for x := 0; x < w; x++ {
+        s.SetContent(x, y, ' ', nil, style)
+    }
+
+    // 3. Выводим символы с учетом Unicode ширины
+    x := 0
+    for _, ch := range msg {
+        s.SetContent(x, y, ch, nil, style)
+        x += runewidth.RuneWidth(ch)
+    }
+
+    // 4. Показываем обновление
+    s.Show()
 }
