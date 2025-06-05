@@ -56,10 +56,14 @@ func scan_command(ctx context.Context, screen tcell.Screen, control chan string)
 					drawMessage(screen, "scan_command: scan⏳ Перед отправкой команды в канал", 7, tcell.StyleDefault.Foreground(tcell.ColorRed))
 					control <- cmd
 					drawMessage(screen, "scan_command: ⏳ Перед отправкой команды в канал", 8, tcell.StyleDefault.Foreground(tcell.ColorRed))
-					if cmd == "exit" {
+					if cmd == "stop" {
 						return
 					}
 
+					w, h := screen.Size()
+					for x := 0; x < w; x++ {
+						screen.SetContent(x, h-1, ' ', nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
+					}
 					buffer = nil 
 				case tcell.KeyBackspace:
 					if len(buffer) > 0 {
@@ -72,6 +76,11 @@ func scan_command(ctx context.Context, screen tcell.Screen, control chan string)
 					if r != 0 {
 						buffer = append(buffer, r)
 					}
+
+					_, height := screen.Size()
+					screen.SetContent(len(buffer), height - 1, r, nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
+					screen.Show()
+        			// x += runewidth.RuneWidth(r)
 				}
 			case *tcell.EventResize:
 				screen.Sync()

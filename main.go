@@ -20,7 +20,7 @@ func main() {
 	wg.Add(2)
 
 	timer.control = make(chan string)
-	timer.setup(5, 0)
+	timer.setup(0, 1)
 	timer.status = Continue
 
 	go func() {
