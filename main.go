@@ -8,13 +8,12 @@ import (
 
 func main() {
 	var timer Timer
-	rl, err := createReadline()
-	if err != nil {
-		panic(err)
-	}
 
     ctx, cancel := context.WithCancel(context.Background())
     defer cancel()
+
+	screen := setupScreen()
+	defer screen.Fini()
 
 	var wg sync.WaitGroup
 	wg.Add(2)
@@ -28,8 +27,7 @@ func main() {
 			fmt.Println("🟢 scan_command завершается")
 			wg.Done()
 		}()
-	// go scan_command(rl, timer.control, timer.done)
-        scan_command(ctx, rl, timer.control)
+        scan_command(ctx, screen, timer.control)
     }()
 
     go func() {
@@ -37,10 +35,9 @@ func main() {
 			fmt.Println("🟢 timer.run завершается")
 			wg.Done()
 		}()
-        timer.run(ctx, cancel, rl)
+        timer.run(cancel)
     }()
 
 	wg.Wait()
-	_ = rl.Close()
 	fmt.Println("👋 Программа завершена.")
 }

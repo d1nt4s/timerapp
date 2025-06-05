@@ -3,48 +3,62 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
-
-	// "sync"
-
-	"github.com/chzyer/readline"
+	"github.com/gdamore/tcell/v2"
 )
 
-func createReadline() (*readline.Instance, error) {
-	rl, err := readline.NewEx(&readline.Config{
-		Prompt:          "> ",
-		InterruptPrompt: "^C",
-		EOFPrompt:       "exit",
-	})
+func setupScreen() tcell.Screen {
+	screen, err := tcell.NewScreen()
 	if err != nil {
-		return nil, err
+		fmt.Fprintf(os.Stderr, "Ошибка инициализации tcell: %v\n", err)
+		os.Exit(1)
 	}
-	return rl, nil
+	if err := screen.Init(); err != nil {
+		fmt.Fprintf(os.Stderr, "Ошибка инициализации экрана: %v\n", err)
+		os.Exit(1)
+	}
+	return screen
 }
 
-// func scan_command(rl *readline.Instance, control chan string, done <-chan bool, wg *sync.WaitGroup) {
-func scan_command(ctx context.Context, rl *readline.Instance, control chan string) {
-	// defer wg.Done()
+func scan_command(ctx context.Context, screen tcell.Screen, control chan string) {
+
+	var buffer []rune
 
 	for {
-		// Создаём select, чтобы слушать и ввод, и завершение
 		select {
 		case <-ctx.Done():
-			fmt.Println("scancommand gets")
+			fmt.Println("scan_command: ctx.Done")
 			return // безопасный выход
 		default:
-			line, err := rl.Readline()
-			if err != nil {
-				return // ^D или закрытие
-			}
-			cmd := strings.ToLower(strings.TrimSpace(line))
-			fmt.Println("⏳ Перед отправкой команды в канал")
-			control <- cmd
-			fmt.Println("⏳ Перед отправкой команды в канал")
-			if cmd == "exit" {
-				return
+			ev := screen.PollEvent()
+			switch ev := ev.(type) {
+			case *tcell.EventKey:
+				switch ev.Key() {
+				case tcell.KeyEnter:
+					line := string(buffer)
+					fmt.Println("scan_command: Введена строка:", line)
+
+					cmd := strings.ToLower(strings.TrimSpace(line))
+					fmt.Println("scan_command: scan⏳ Перед отправкой команды в канал")
+					control <- cmd
+					fmt.Println("scan_command: ⏳ Перед отправкой команды в канал")
+					if cmd == "exit" {
+						return
+					}
+
+					buffer = nil // очистить буфер
+				case tcell.KeyBackspace:
+					if len(buffer) > 0 {
+						buffer = buffer[:len(buffer)-1]
+					}
+				default:
+					r := ev.Rune()
+					if r != 0 {
+						buffer = append(buffer, r)
+					}
+				}
 			}
 		}
 	}
 }
-

@@ -4,15 +4,13 @@ import (
 	"context"
 	"fmt"
 	"time"
-
-	"github.com/chzyer/readline"
 )
 
 type Timer struct {
 	seconds int
 	minutes int
 	control chan string
-	status Status
+	status  Status
 }
 
 type Status int
@@ -41,11 +39,19 @@ func (t *Timer) decrementSec() {
 	t.status = Continue
 }
 
-func (t *Timer) run(ctx context.Context, cancel context.CancelFunc, rl *readline.Instance) {
+func (t *Timer) run(cancel context.CancelFunc) {
 	for {
-		t.manage(rl)
+		t.manage()
 
 		if t.status == End {
+		Drain:
+			for {
+				select {
+				case <-t.control:
+				default:
+					break Drain
+				}
+			}
 			cancel()
 			return
 		}
@@ -56,38 +62,35 @@ func (t *Timer) run(ctx context.Context, cancel context.CancelFunc, rl *readline
 		}
 
 		t.decrementSec()
-		// fmt.Printf("\033[2K\r Minutes: %d, Seconds: %d ", t.minutes, t.seconds)
-		rl.Write([]byte(fmt.Sprintf("\033[1A\033[2K⏳ Осталось: %d мин %02d сек\n", t.minutes, t.seconds)))
-		rl.Refresh()
+		fmt.Printf("\033[1A\033[2K⏳ Осталось: %d мин %02d сек\n", t.minutes, t.seconds)
 
 		time.Sleep(time.Second)
 	}
 }
 
-func (t *Timer) manage(rl *readline.Instance) {
+func (t *Timer) manage() {
 	select {
 	case cmd := <-t.control:
 		switch cmd {
 		case "stop":
 			t.setup(0, 0)
 			t.status = End
-			rl.Write([]byte("\n Таймер остановлен\n"))
+			fmt.Printf("\n Таймер остановлен\n")
 		case "reset":
 			t.setup(0, 15)
-			rl.Write([]byte("\n🔁 Таймер сброшен\n"))
+			fmt.Printf("\n🔁 Таймер сброшен\n")
 		case "pause":
 			t.status = Pause
-			rl.Write([]byte("\n⏸ Таймер на паузе\n"))
+			fmt.Printf("\n⏸ Таймер на паузе\n")
 		case "resume":
 			t.status = Continue
-			rl.Write([]byte("\n▶️ Таймер продолжается\n"))
+			fmt.Printf("\n▶️ Таймер продолжается\n")
 		case "exit":
 			fmt.Println("t")
 			t.status = End
 		default:
-			rl.Write([]byte(fmt.Sprintf("\n🤷 Неизвестная команда: %s\n", cmd)))
+			fmt.Printf("\n🤷 Неизвестная команда: %s\n", cmd)
 		}
 	default:
 	}
 }
-
