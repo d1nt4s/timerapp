@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"sync"
-	"time"
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -23,29 +22,25 @@ func main() {
 	timer.setup(0, 1)
 	timer.status = Continue
 
-	// app := NewApp();
-
-	commandCh := make(chan string)
+	app := NewApp();
 	acceptingTimerCommands := false
 
 	go func() {
 		defer func() {
-			drawMessage(screen, "🟢 scan_command завершается", 2, tcell.StyleDefault.Foreground(tcell.ColorRed))
+			Debug("🟢 scanCommand завершается")
 			wg.Done()
 		}()
-        scanCommand(ctx, screen, commandCh)
+        scanCommand(ctx, screen, app.uiCommandCh)
     }()
 
 	Loop:
 	for {
 		
-		drawMessage(screen, "перед select", 9, tcell.StyleDefault.Foreground(tcell.ColorRed))
 		select {
-		case cmd := <-commandCh:
+		case cmd := <-app.uiCommandCh:
 			if acceptingTimerCommands {
 				timer.control <- cmd
 			} else {
-				drawFormattedMessage(screen, 7, tcell.StyleDefault.Foreground(tcell.ColorYellow), "перед switch cmd: %s", cmd)
 				switch cmd {
 				case "exit":
 					drawMessage(screen, "👋 Выход", 3, tcell.StyleDefault.Foreground(tcell.ColorRed))
@@ -58,7 +53,7 @@ func main() {
 					go func() {
 						defer func() {
 							acceptingTimerCommands = false
-							drawMessage(screen, "🟢 timer.run завершается", 3, tcell.StyleDefault.Foreground(tcell.ColorRed))
+							Debug("🟢 timer.run завершается")
 							wg.Done()
 							drawMessage(screen, "⏱ Таймер завершён", 4, tcell.StyleDefault.Foreground(tcell.ColorGreen))
 							drawMessage(screen, "✏️  Введите 'new' или 'exit'", 5, tcell.StyleDefault.Foreground(tcell.ColorGreen))
@@ -77,6 +72,4 @@ func main() {
 
 	wg.Wait()
 	drawMessage(screen, "👋 Программа завершена.", 5, tcell.StyleDefault.Foreground(tcell.ColorRed))
-
-	time.Sleep(time.Second * 10)
 }

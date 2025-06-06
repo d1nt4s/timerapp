@@ -1,12 +1,12 @@
 package main
 
 type App struct {
-	timerDoneCh chan string
+	uiCommandCh chan string
 }
 
 func NewApp() *App {
 
 	return &App {
-		timerDoneCh: make(chan string),
+		uiCommandCh: make(chan string),
 	}	
 }
