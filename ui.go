@@ -80,3 +80,15 @@ func drawBigTimer(s tcell.Screen, min, sec int, startY int, style tcell.Style) {
 	}
 	s.Show()
 }
+
+func userNotice(s tcell.Screen, msg string) {
+	drawMessage(s, msg, 7, tcell.StyleDefault.Foreground(tcell.ColorWhite))
+}
+
+func userHint(s tcell.Screen, msg string) {
+	drawMessage(s, msg, 8, tcell.StyleDefault.Foreground(tcell.ColorYellow))
+}
+
+func userError(s tcell.Screen, msg string) {
+	drawMessage(s, msg, 9, tcell.StyleDefault.Foreground(tcell.ColorRed))
+}

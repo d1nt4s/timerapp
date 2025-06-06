@@ -1,9 +1,9 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"time"
+
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -40,7 +40,7 @@ func (t *Timer) decrementSec() {
 	t.status = Continue
 }
 
-func (t *Timer) run(cancel context.CancelFunc, s tcell.Screen) {
+func (t *Timer) run(s tcell.Screen) {
 
 	for {
 		t.manage(s)
@@ -54,8 +54,7 @@ func (t *Timer) run(cancel context.CancelFunc, s tcell.Screen) {
 					break Drain
 				}
 			}
-			fmt.Println() 
-			cancel()
+			fmt.Println()
 			return
 		}
 
@@ -65,13 +64,11 @@ func (t *Timer) run(cancel context.CancelFunc, s tcell.Screen) {
 		}
 
 		t.decrementSec()
-		// drawRemainingTime(s, t.minutes, t.seconds, 0, tcell.StyleDefault.Foreground(tcell.ColorWhite))
 		drawBigTimer(s, t.minutes, t.seconds, 0, tcell.StyleDefault.Foreground(tcell.ColorWhite))
 
 		time.Sleep(time.Second)
 	}
 }
-
 
 func (t *Timer) manage(screen tcell.Screen) {
 	select {
@@ -79,21 +76,20 @@ func (t *Timer) manage(screen tcell.Screen) {
 		switch cmd {
 		case "stop":
 			t.status = End
-			drawMessage(screen, "Таймер остановлен", 4, tcell.StyleDefault.Foreground(tcell.ColorRed))
+			userNotice(screen, "Таймер остановлен")
 		case "reset":
 			t.setup(0, 15)
-			drawMessage(screen, "🔁 Таймер сброшен", 4, tcell.StyleDefault.Foreground(tcell.ColorRed))
+			userNotice(screen, "🔁 Таймер сброшен")
 		case "pause":
 			t.status = Pause
-			drawMessage(screen, "⏸ Таймер на паузе", 4, tcell.StyleDefault.Foreground(tcell.ColorRed))
+			userNotice(screen, "⏸ Таймер на паузе")
 		case "resume":
 			t.status = Continue
-			drawMessage(screen, "▶️ Таймер продолжается", 4, tcell.StyleDefault.Foreground(tcell.ColorRed))
+			userNotice(screen, "▶️ Таймер продолжается")
 		default:
-			drawFormattedMessage(screen, 4, tcell.StyleDefault.Foreground(tcell.ColorYellow), "🤷 Неизвестная команда: %s", cmd)
+			userError(screen, "🤷 Неизвестная команда "+cmd)
 
 		}
 	default:
 	}
 }
-

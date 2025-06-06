@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"strings"
@@ -21,7 +20,7 @@ func setupScreen() tcell.Screen {
 	return screen
 }
 
-func scanCommand(ctx context.Context, screen tcell.Screen, control chan string) {
+func scanCommand(screen tcell.Screen, control chan string) {
 
 	var buffer []rune
 	eventChan := make(chan tcell.Event)
@@ -53,9 +52,9 @@ func scanCommand(ctx context.Context, screen tcell.Screen, control chan string) 
 					// fmt.Println("scan_command: Введена строка:", line)
 
 					cmd := strings.ToLower(strings.TrimSpace(line))
-					drawFormattedMessage(screen, 7, tcell.StyleDefault.Foreground(tcell.ColorYellow), "scan_command: Перед отправкой команды в канал: %s", cmd)
+					Debug("Перед отправкой команды в канал: %s" + cmd)
 					control <- cmd
-					drawMessage(screen, "scan_command: После отправки команды в канал", 8, tcell.StyleDefault.Foreground(tcell.ColorRed))
+					Debug("После отправки команды в канал")
 					if cmd == "exit" {
 						return
 					}
