@@ -21,7 +21,7 @@ func setupScreen() tcell.Screen {
 	return screen
 }
 
-func scan_command(ctx context.Context, screen tcell.Screen, control chan string) {
+func scanCommand(ctx context.Context, screen tcell.Screen, control chan string) {
 
 	var buffer []rune
 	eventChan := make(chan tcell.Event)
@@ -30,8 +30,8 @@ func scan_command(ctx context.Context, screen tcell.Screen, control chan string)
 	go func() {
 		for {
 			select {
-			case <-ctx.Done():
-				return
+			// case <-ctx.Done():
+			// 	return
 			default:
 				event := screen.PollEvent()
 				eventChan <- event
@@ -41,9 +41,9 @@ func scan_command(ctx context.Context, screen tcell.Screen, control chan string)
 
 	for {
 		select {
-		case <-ctx.Done():
-			drawMessage(screen, "scan_command: ctx.Done", 6, tcell.StyleDefault.Foreground(tcell.ColorRed))
-			return 
+		// case <-ctx.Done():
+		// 	drawMessage(screen, "scan_command: ctx.Done", 6, tcell.StyleDefault.Foreground(tcell.ColorRed))
+		// 	return 
 		case ev := <-eventChan:
 			switch ev := ev.(type) {
 			case *tcell.EventKey:
@@ -53,10 +53,10 @@ func scan_command(ctx context.Context, screen tcell.Screen, control chan string)
 					// fmt.Println("scan_command: Введена строка:", line)
 
 					cmd := strings.ToLower(strings.TrimSpace(line))
-					drawMessage(screen, "scan_command: scan⏳ Перед отправкой команды в канал", 7, tcell.StyleDefault.Foreground(tcell.ColorRed))
+					drawFormattedMessage(screen, 7, tcell.StyleDefault.Foreground(tcell.ColorYellow), "scan_command: Перед отправкой команды в канал: %s", cmd)
 					control <- cmd
-					drawMessage(screen, "scan_command: ⏳ Перед отправкой команды в канал", 8, tcell.StyleDefault.Foreground(tcell.ColorRed))
-					if cmd == "stop" {
+					drawMessage(screen, "scan_command: После отправки команды в канал", 8, tcell.StyleDefault.Foreground(tcell.ColorRed))
+					if cmd == "exit" {
 						return
 					}
 
