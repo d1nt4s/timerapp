@@ -1,32 +1,27 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"os"
 	"strings"
+
 	"github.com/gdamore/tcell/v2"
 )
 
-func setupScreen() tcell.Screen {
-	screen, err := tcell.NewScreen()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Ошибка инициализации tcell: %v\n", err)
-		os.Exit(1)
+// scanCommand читает пользовательский ввод и отправляет команды в канал
+func scanCommand(screen tcell.Screen, out chan<- string) {
+	var input []rune
+	_, h := screen.Size()
+	inputY := h - 1
+
+	updateInputLine := func() {
+		clearLine(screen, inputY, tcell.StyleDefault)
+		printAt(screen, 0, inputY, string(input), tcell.StyleDefault)
+		screen.ShowCursor(len(input), inputY)
+		screen.Show()
 	}
-	if err := screen.Init(); err != nil {
-		fmt.Fprintf(os.Stderr, "Ошибка инициализации экрана: %v\n", err)
-		os.Exit(1)
-	}
-	return screen
-}
 
-func scan_command(ctx context.Context, screen tcell.Screen, control chan string) {
+	screen.ShowCursor(0, inputY)
+	screen.Show()
 
-	var buffer []rune
-	eventChan := make(chan tcell.Event)
-
-	// Горутинa, чтобы проксировать события
 	go func() {
 		for {
 			select {
@@ -40,51 +35,31 @@ func scan_command(ctx context.Context, screen tcell.Screen, control chan string)
 	}()
 
 	for {
-		select {
-		case <-ctx.Done():
-			drawMessage(screen, "scan_command: ctx.Done", 6, tcell.StyleDefault.Foreground(tcell.ColorRed))
-			return 
-		case ev := <-eventChan:
-			switch ev := ev.(type) {
-			case *tcell.EventKey:
-				switch ev.Key() {
-				case tcell.KeyEnter:
-					line := string(buffer)
-					// fmt.Println("scan_command: Введена строка:", line)
+		event := screen.PollEvent()
 
-					cmd := strings.ToLower(strings.TrimSpace(line))
-					drawMessage(screen, "scan_command: scan⏳ Перед отправкой команды в канал", 7, tcell.StyleDefault.Foreground(tcell.ColorRed))
-					control <- cmd
-					drawMessage(screen, "scan_command: ⏳ Перед отправкой команды в канал", 8, tcell.StyleDefault.Foreground(tcell.ColorRed))
-					if cmd == "stop" {
-						return
-					}
-
-					w, h := screen.Size()
-					for x := 0; x < w; x++ {
-						screen.SetContent(x, h-1, ' ', nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
-					}
-					buffer = nil 
-				case tcell.KeyBackspace:
-					if len(buffer) > 0 {
-						buffer = buffer[:len(buffer)-1]
-					}
-				case tcell.KeyCtrlC:
-					return
-				default:
-					r := ev.Rune()
-					if r != 0 {
-						buffer = append(buffer, r)
-					}
-
-					_, height := screen.Size()
-					screen.SetContent(len(buffer), height - 1, r, nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
-					screen.Show()
-        			// x += runewidth.RuneWidth(r)
+		switch ev := event.(type) {
+		case *tcell.EventKey:
+			switch ev.Key() {
+			case tcell.KeyEnter:
+				cmd := strings.TrimSpace(string(input))
+				if cmd != "" {
+					out <- cmd
 				}
-			case *tcell.EventResize:
-				screen.Sync()
+				input = nil
+
+			case tcell.KeyBackspace, tcell.KeyBackspace2:
+				if len(input) > 0 {
+					input = input[:len(input)-1]
+				}
+
+			case tcell.KeyRune:
+				input = append(input, ev.Rune())
+
+			case tcell.KeyCtrlC:
+				out <- "exit"
 			}
+
+			updateInputLine()
 		}
 	}
 }

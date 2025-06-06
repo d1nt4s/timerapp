@@ -2,59 +2,41 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"time"
+
 	"github.com/gdamore/tcell/v2"
 )
 
-type Timer struct {
-	seconds int
-	minutes int
-	control chan string
-	status  Status
-}
-
-type Status int
+type TimerStatus int
 
 const (
-	Continue Status = iota
+	Continue TimerStatus = iota
 	Pause
 	End
 )
 
-func (t *Timer) setup(sec int, min int) {
-	t.seconds = sec
-	t.minutes = min
+type Timer struct {
+	Minutes int
+	Seconds int
+	control chan string
+	status  TimerStatus
 }
 
-func (t *Timer) decrementSec() {
-	if t.seconds == 0 {
-		if t.minutes == 0 {
-			t.status = End
-			return
-		}
-		t.minutes--
-		t.seconds = 60
+func NewTimer(min, sec int) *Timer {
+	return &Timer{
+		Minutes: min,
+		Seconds: sec,
+		control: make(chan string),
+		status:  Continue,
 	}
-	t.seconds--
-	t.status = Continue
 }
 
-func (t *Timer) run(cancel context.CancelFunc, s tcell.Screen) {
-
+func (t *Timer) Run(cancel context.CancelFunc, screen tcell.Screen) {
 	for {
-		t.manage(s)
+		t.manage(screen)
 
 		if t.status == End {
-		Drain:
-			for {
-				select {
-				case <-t.control:
-				default:
-					break Drain
-				}
-			}
-			fmt.Println() 
+			t.drainControl()
 			cancel()
 			return
 		}
@@ -64,14 +46,11 @@ func (t *Timer) run(cancel context.CancelFunc, s tcell.Screen) {
 			continue
 		}
 
-		t.decrementSec()
-		// drawRemainingTime(s, t.minutes, t.seconds, 0, tcell.StyleDefault.Foreground(tcell.ColorWhite))
-		drawBigTimer(s, t.minutes, t.seconds, 0, tcell.StyleDefault.Foreground(tcell.ColorWhite))
-
+		t.updateTime()
+		drawBigTimer(screen, t.Minutes, t.Seconds, 0, tcell.StyleDefault.Foreground(tcell.ColorWhite))
 		time.Sleep(time.Second)
 	}
 }
-
 
 func (t *Timer) manage(screen tcell.Screen) {
 	select {
@@ -79,21 +58,48 @@ func (t *Timer) manage(screen tcell.Screen) {
 		switch cmd {
 		case "stop":
 			t.status = End
-			drawMessage(screen, "Таймер остановлен", 4, tcell.StyleDefault.Foreground(tcell.ColorRed))
+			drawMessage(screen, "⛔ Таймер остановлен", 4, tcell.StyleDefault.Foreground(tcell.ColorRed))
 		case "reset":
-			t.setup(0, 15)
-			drawMessage(screen, "🔁 Таймер сброшен", 4, tcell.StyleDefault.Foreground(tcell.ColorRed))
+			t.Minutes = 0
+			t.Seconds = 15
+			t.status = Continue
+			drawMessage(screen, "🔁 Таймер сброшен", 4, tcell.StyleDefault.Foreground(tcell.ColorYellow))
 		case "pause":
 			t.status = Pause
-			drawMessage(screen, "⏸ Таймер на паузе", 4, tcell.StyleDefault.Foreground(tcell.ColorRed))
+			drawMessage(screen, "⏸ Таймер на паузе", 4, tcell.StyleDefault.Foreground(tcell.ColorYellow))
 		case "resume":
 			t.status = Continue
-			drawMessage(screen, "▶️ Таймер продолжается", 4, tcell.StyleDefault.Foreground(tcell.ColorRed))
+			drawMessage(screen, "▶️ Продолжение таймера", 4, tcell.StyleDefault.Foreground(tcell.ColorGreen))
 		default:
-			drawFormattedMessage(screen, 4, tcell.StyleDefault.Foreground(tcell.ColorYellow), "🤷 Неизвестная команда: %s", cmd)
-
+			drawFormattedMessage(screen, 4, tcell.StyleDefault.Foreground(tcell.ColorOrange), "🤷 Неизвестная команда: %s", cmd)
 		}
 	default:
 	}
 }
 
+func (t *Timer) updateTime() {
+	if t.Seconds == 0 {
+		if t.Minutes > 0 {
+			t.Minutes--
+			t.Seconds = 59
+		}
+	} else {
+		t.Seconds--
+	}
+}
+
+func (t *Timer) drainControl() {
+Drain:
+	for {
+		select {
+		case <-t.control:
+		default:
+			break Drain
+		}
+	}
+}
+
+func (t *Timer) Pause()  { t.control <- "pause" }
+func (t *Timer) Resume() { t.control <- "resume" }
+func (t *Timer) Stop()   { t.control <- "stop" }
+func (t *Timer) Reset()  { t.control <- "reset" }
