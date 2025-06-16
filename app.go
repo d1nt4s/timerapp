@@ -42,16 +42,15 @@ func (a *App) Run() {
 	}()
 
 Loop:
-	for {
 
-		select {
-		case cmd := <-a.uiCommandCh:
-			if a.acceptingTimerCommands {
-				a.timer.control <- cmd
-			} else {
-				if a.handleCommand(cmd) {
-					break Loop
-				}
+	for cmd := range a.uiCommandCh {
+		if a.acceptingTimerCommands {
+			if parsed, ok := ParseCommand(cmd); ok {
+				a.timer.control <- parsed
+			}
+		} else {
+			if a.handleCommand(cmd) {
+				break Loop
 			}
 		}
 	}
@@ -82,8 +81,8 @@ func (a *App) startTimer() {
 			userHint(a.screen, "✏️  Введите 'new' или 'exit'")
 
 		}()
-		a.timer.setTimer(1, 0)
-		a.timer.run(a.screen)
+		a.timer.Set(1, 0)
+		a.timer.Run(a.screen)
 
 	}()
 }

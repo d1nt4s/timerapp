@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"strings"
 	"time"
 
 	"github.com/gdamore/tcell/v2"
@@ -24,12 +24,22 @@ const (
 	CmdResume Command = "resume"
 )
 
-var TimerCommandChan = make(chan Command)
+var commandMap = map[string]Command{
+	"stop":   CmdStop,
+	"reset":  CmdReset,
+	"pause":  CmdPause,
+	"resume": CmdResume,
+}
+
+func ParseCommand(input string) (Command, bool) {
+	cmd, ok := commandMap[strings.ToLower(strings.TrimSpace(input))]
+	return cmd, ok
+}
 
 type Timer struct {
 	Minutes int
 	Seconds int
-	control chan string
+	control chan Command
 	status  TimerStatus
 }
 
@@ -37,44 +47,26 @@ func NewTimer(min, sec int) *Timer {
 	return &Timer{
 		Minutes: min,
 		Seconds: sec,
-		control: make(chan string),
+		control: make(chan Command),
 		status:  Continue,
 	}
 }
 
-func (t *Timer) setTimer(min, sec int) {
+func (t *Timer) ControlChan() chan Command {
+	return t.control
+}
+
+func (t *Timer) Set(min, sec int) {
 	t.Minutes = min
 	t.Seconds = sec
 }
 
-func (t *Timer) decrementSec() {
-	if t.Seconds == 0 {
-		if t.Minutes == 0 {
-			t.status = End
-			return
-		}
-		t.Minutes--
-		t.Seconds = 60
-	}
-	t.Seconds--
-	t.status = Continue
-}
-
-func (t *Timer) run(s tcell.Screen) {
-
+func (t *Timer) Run(s tcell.Screen) {
 	for {
-		t.manage(s)
+		t.handleCommands(s)
 
 		if t.status == End {
-		Drain:
-			for {
-				select {
-				case <-t.control:
-				default:
-					break Drain
-				}
-			}
-			fmt.Println()
+			t.drainControlChan()
 			return
 		}
 
@@ -83,33 +75,55 @@ func (t *Timer) run(s tcell.Screen) {
 			continue
 		}
 
-		t.decrementSec()
+		t.tick()
 		drawBigTimer(s, t.Minutes, t.Seconds, 0, tcell.StyleDefault.Foreground(tcell.ColorWhite))
-
 		time.Sleep(time.Second)
 	}
 }
 
-func (t *Timer) manage(screen tcell.Screen) {
+func (t *Timer) tick() {
+	if t.Seconds == 0 {
+		if t.Minutes == 0 {
+			t.status = End
+			return
+		}
+		t.Minutes--
+		t.Seconds = 59
+	} else {
+		t.Seconds--
+	}
+	t.status = Continue
+}
+
+func (t *Timer) handleCommands(screen tcell.Screen) {
 	select {
 	case cmd := <-t.control:
 		switch cmd {
-		case "stop":
+		case CmdStop:
 			t.status = End
-			userNotice(screen, "Таймер остановлен")
-		case "reset":
-			t.setTimer(0, 15)
+			userNotice(screen, "⏹ Таймер остановлен")
+		case CmdReset:
+			t.Set(0, 15)
 			userNotice(screen, "🔁 Таймер сброшен")
-		case "pause":
+		case CmdPause:
 			t.status = Pause
 			userNotice(screen, "⏸ Таймер на паузе")
-		case "resume":
+		case CmdResume:
 			t.status = Continue
 			userNotice(screen, "▶️ Таймер продолжается")
 		default:
-			userError(screen, "🤷 Неизвестная команда "+cmd)
-
+			userError(screen, "🤷 Неизвестная команда: "+string(cmd))
 		}
 	default:
+	}
+}
+
+func (t *Timer) drainControlChan() {
+	for {
+		select {
+		case <-t.control:
+		default:
+			return
+		}
 	}
 }
