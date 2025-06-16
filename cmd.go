@@ -7,69 +7,78 @@ import (
 )
 
 func scanCommand(screen tcell.Screen, control chan string) {
-
 	var buffer []rune
 	eventChan := make(chan tcell.Event)
 
-	// Горутинa, чтобы проксировать события
+	// Асинхронная проксирующая горутина
 	go func() {
 		for {
-			select {
-			// case <-ctx.Done():
-			// 	return
-			default:
-				event := screen.PollEvent()
-				eventChan <- event
-			}
+			event := screen.PollEvent()
+			eventChan <- event
 		}
 	}()
 
-	for {
-		select {
-		// case <-ctx.Done():
-		// 	drawMessage(screen, "scan_command: ctx.Done", 6, tcell.StyleDefault.Foreground(tcell.ColorRed))
-		// 	return
-		case ev := <-eventChan:
-			switch ev := ev.(type) {
-			case *tcell.EventKey:
-				switch ev.Key() {
-				case tcell.KeyEnter:
-					line := string(buffer)
-					// fmt.Println("scan_command: Введена строка:", line)
-
-					cmd := strings.ToLower(strings.TrimSpace(line))
-					Debug("Перед отправкой команды в канал: %s" + cmd)
-					control <- cmd
-					Debug("После отправки команды в канал")
-					if cmd == "exit" {
-						return
-					}
-
-					w, h := screen.Size()
-					for x := 0; x < w; x++ {
-						screen.SetContent(x, h-1, ' ', nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
-					}
-					buffer = nil
-				case tcell.KeyBackspace:
-					if len(buffer) > 0 {
-						buffer = buffer[:len(buffer)-1]
-					}
-				case tcell.KeyCtrlC:
-					return
-				default:
-					r := ev.Rune()
-					if r != 0 {
-						buffer = append(buffer, r)
-					}
-
-					_, height := screen.Size()
-					screen.SetContent(len(buffer), height-1, r, nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
-					screen.Show()
-					// x += runewidth.RuneWidth(r)
-				}
-			case *tcell.EventResize:
-				screen.Sync()
+	for ev := range eventChan {
+		switch ev := ev.(type) {
+		case *tcell.EventKey:
+			if handleKeyEvent(ev, screen, &buffer, control) {
+				return // пользователь ввёл "exit" или нажал Ctrl+C
 			}
+		case *tcell.EventResize:
+			screen.Sync()
 		}
 	}
+}
+
+func handleKeyEvent(ev *tcell.EventKey, screen tcell.Screen, buffer *[]rune, control chan string) (exit bool) {
+	switch ev.Key() {
+	case tcell.KeyEnter:
+		cmd := strings.ToLower(strings.TrimSpace(string(*buffer)))
+		Debug("Перед отправкой команды в канал: %s" + cmd)
+		control <- cmd
+		Debug("После отправки команды в канал")
+
+		if cmd == "exit" {
+			return true
+		}
+
+		clearInputLine(screen)
+		*buffer = nil
+
+	case tcell.KeyBackspace:
+		if len(*buffer) > 0 {
+			*buffer = (*buffer)[:len(*buffer)-1]
+		}
+
+	case tcell.KeyCtrlC:
+		return true
+
+	default:
+		r := ev.Rune()
+		if r != 0 {
+			*buffer = append(*buffer, r)
+			writeToInputLine(screen, *buffer)
+		}
+	}
+
+	return false
+}
+
+func writeToInputLine(screen tcell.Screen, buffer []rune) {
+	width, height := screen.Size()
+	for x := 0; x < width; x++ {
+		screen.SetContent(x, height-1, ' ', nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
+	}
+	for i, r := range buffer {
+		screen.SetContent(i, height-1, r, nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
+	}
+	screen.Show()
+}
+
+func clearInputLine(screen tcell.Screen) {
+	width, height := screen.Size()
+	for x := 0; x < width; x++ {
+		screen.SetContent(x, height-1, ' ', nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
+	}
+	screen.Show()
 }
