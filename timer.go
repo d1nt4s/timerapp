@@ -7,36 +7,56 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-type Timer struct {
-	seconds int
-	minutes int
-	control chan string
-	status  Status
-}
-
-type Status int
+type TimerStatus int
 
 const (
-	Continue Status = iota
+	Continue TimerStatus = iota
 	Pause
 	End
 )
 
-func (t *Timer) setup(sec int, min int) {
-	t.seconds = sec
-	t.minutes = min
+type Command string
+
+const (
+	CmdStop   Command = "stop"
+	CmdReset  Command = "reset"
+	CmdPause  Command = "pause"
+	CmdResume Command = "resume"
+)
+
+var TimerCommandChan = make(chan Command)
+
+type Timer struct {
+	Minutes int
+	Seconds int
+	control chan string
+	status  TimerStatus
+}
+
+func NewTimer(min, sec int) *Timer {
+	return &Timer{
+		Minutes: min,
+		Seconds: sec,
+		control: make(chan string),
+		status:  Continue,
+	}
+}
+
+func (t *Timer) setTimer(min, sec int) {
+	t.Minutes = min
+	t.Seconds = sec
 }
 
 func (t *Timer) decrementSec() {
-	if t.seconds == 0 {
-		if t.minutes == 0 {
+	if t.Seconds == 0 {
+		if t.Minutes == 0 {
 			t.status = End
 			return
 		}
-		t.minutes--
-		t.seconds = 60
+		t.Minutes--
+		t.Seconds = 60
 	}
-	t.seconds--
+	t.Seconds--
 	t.status = Continue
 }
 
@@ -64,7 +84,7 @@ func (t *Timer) run(s tcell.Screen) {
 		}
 
 		t.decrementSec()
-		drawBigTimer(s, t.minutes, t.seconds, 0, tcell.StyleDefault.Foreground(tcell.ColorWhite))
+		drawBigTimer(s, t.Minutes, t.Seconds, 0, tcell.StyleDefault.Foreground(tcell.ColorWhite))
 
 		time.Sleep(time.Second)
 	}
@@ -78,7 +98,7 @@ func (t *Timer) manage(screen tcell.Screen) {
 			t.status = End
 			userNotice(screen, "Таймер остановлен")
 		case "reset":
-			t.setup(0, 15)
+			t.setTimer(0, 15)
 			userNotice(screen, "🔁 Таймер сброшен")
 		case "pause":
 			t.status = Pause

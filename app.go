@@ -29,12 +29,9 @@ func NewApp() *App {
 }
 
 func (a *App) Run() {
-	userNotice(a.screen, "⌨️  Введите команду (start / exit):")
+	userNotice(a.screen, "⌨️  Введите команду (new / exit):")
 
-	var timer Timer
-
-	a.timer = &timer
-	a.timer.control = make(chan string)	
+	a.timer = NewTimer(1, 0)
 	a.acceptingTimerCommands = false
 
 	go func() {
@@ -65,7 +62,7 @@ func (a *App) handleCommand(cmd string) bool {
 	case "exit":
 		return true
 	case "new":
-		a.startTimer(1, 0)
+		a.startTimer()
 	default:
 		userError(a.screen, "🤷 Неизвестная команда")
 	}
@@ -73,10 +70,8 @@ func (a *App) handleCommand(cmd string) bool {
 	return false
 }
 
-func (a *App) startTimer(min, sec int) {
+func (a *App) startTimer() {
 
-	a.timer.setup(sec, min)
-	a.timer.status = Continue
 	a.acceptingTimerCommands = true
 
 	go func() {
@@ -87,6 +82,7 @@ func (a *App) startTimer(min, sec int) {
 			userHint(a.screen, "✏️  Введите 'new' или 'exit'")
 
 		}()
+		a.timer.setTimer(1, 0)
 		a.timer.run(a.screen)
 
 	}()

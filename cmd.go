@@ -1,24 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"os"
 	"strings"
+
 	"github.com/gdamore/tcell/v2"
 )
-
-func setupScreen() tcell.Screen {
-	screen, err := tcell.NewScreen()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Ошибка инициализации tcell: %v\n", err)
-		os.Exit(1)
-	}
-	if err := screen.Init(); err != nil {
-		fmt.Fprintf(os.Stderr, "Ошибка инициализации экрана: %v\n", err)
-		os.Exit(1)
-	}
-	return screen
-}
 
 func scanCommand(screen tcell.Screen, control chan string) {
 
@@ -42,7 +28,7 @@ func scanCommand(screen tcell.Screen, control chan string) {
 		select {
 		// case <-ctx.Done():
 		// 	drawMessage(screen, "scan_command: ctx.Done", 6, tcell.StyleDefault.Foreground(tcell.ColorRed))
-		// 	return 
+		// 	return
 		case ev := <-eventChan:
 			switch ev := ev.(type) {
 			case *tcell.EventKey:
@@ -63,7 +49,7 @@ func scanCommand(screen tcell.Screen, control chan string) {
 					for x := 0; x < w; x++ {
 						screen.SetContent(x, h-1, ' ', nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
 					}
-					buffer = nil 
+					buffer = nil
 				case tcell.KeyBackspace:
 					if len(buffer) > 0 {
 						buffer = buffer[:len(buffer)-1]
@@ -77,9 +63,9 @@ func scanCommand(screen tcell.Screen, control chan string) {
 					}
 
 					_, height := screen.Size()
-					screen.SetContent(len(buffer), height - 1, r, nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
+					screen.SetContent(len(buffer), height-1, r, nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
 					screen.Show()
-        			// x += runewidth.RuneWidth(r)
+					// x += runewidth.RuneWidth(r)
 				}
 			case *tcell.EventResize:
 				screen.Sync()
