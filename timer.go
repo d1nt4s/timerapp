@@ -7,40 +7,6 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-type TimerStatus int
-
-const (
-	Continued TimerStatus = iota
-	Paused
-	Stopped
-	ExitApp
-)
-
-type TimerResult int
-
-const (
-	TimerStopped TimerResult = iota
-	TimerExitApp
-)
-
-type Command string
-
-const (
-	CmdStop   Command = "stop"
-	CmdReset  Command = "reset"
-	CmdPause  Command = "pause"
-	CmdResume Command = "resume"
-	CmdExit   Command = "exit"
-)
-
-var commandMap = map[string]Command{
-	"stop":   CmdStop,
-	"reset":  CmdReset,
-	"pause":  CmdPause,
-	"resume": CmdResume,
-	"exit":   CmdExit,
-}
-
 func ParseCommand(input string) (Command, string, bool) {
 	cleaned := strings.ToLower(strings.TrimSpace(input))
 	cmd, ok := commandMap[cleaned]

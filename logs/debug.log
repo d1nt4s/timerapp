@@ -1,235 +1,27 @@
-[06-17 19:26:45.994 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:26:46.060 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "n"
-[06-17 19:26:46.125 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:26:46.441 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "new"
-[06-17 19:26:46.441 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'ne'
-[06-17 19:26:46.595 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:26:46.595 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'n'
-[06-17 19:26:46.750 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "n"
-[06-17 19:26:46.751 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: ''
-[06-17 19:26:47.398 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:26:47.499 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "n"
-[06-17 19:26:47.516 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:27:07.693 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "new"
-[06-17 19:27:07.695 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'ne'
-[06-17 19:27:07.837 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:27:07.837 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'n'
-[06-17 19:27:07.993 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "n"
-[06-17 19:27:07.994 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: ''
-[06-17 19:27:08.847 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:09.030 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "n"
-[06-17 19:27:09.064 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:27:24.161 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "new"
-[06-17 19:27:24.161 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:27:25.850 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:25.962 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "p"
-[06-17 19:27:26.161 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "pa"
-[06-17 19:27:26.264 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "pau"
-[06-17 19:27:26.377 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "paus"
-[06-17 19:27:26.934 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "pause"
-[06-17 19:27:26.934 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:27:28.410 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:28.457 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "r"
-[06-17 19:27:28.671 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "re"
-[06-17 19:27:28.735 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "res"
-[06-17 19:27:28.956 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "resu"
-[06-17 19:27:29.074 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "resum"
-[06-17 19:27:29.411 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "resume"
-[06-17 19:27:29.411 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'resum'
-[06-17 19:27:29.599 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "resum"
-[06-17 19:27:29.599 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'resu'
-[06-17 19:27:29.760 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "resu"
-[06-17 19:27:29.760 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'res'
-[06-17 19:27:30.344 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "res"
-[06-17 19:27:30.545 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "resu"
-[06-17 19:27:30.636 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "resum"
-[06-17 19:27:30.961 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "resume"
-[06-17 19:27:30.962 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:27:32.807 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:32.911 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "p"
-[06-17 19:27:33.126 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "pa"
-[06-17 19:27:33.269 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "pau"
-[06-17 19:27:33.298 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "paus"
-[06-17 19:27:34.274 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "pause"
-[06-17 19:27:34.274 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:27:35.706 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:35.753 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "r"
-[06-17 19:27:36.323 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "re"
-[06-17 19:27:36.381 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "res"
-[06-17 19:27:36.604 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "resu"
-[06-17 19:27:36.676 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "resum"
-[06-17 19:27:36.953 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "resume"
-[06-17 19:27:36.953 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:27:39.818 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:40.013 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "s"
-[06-17 19:27:40.079 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "st"
-[06-17 19:27:40.224 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "sto"
-[06-17 19:27:40.483 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "stop"
-[06-17 19:27:40.483 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'sto'
-[06-17 19:27:40.641 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "sto"
-[06-17 19:27:40.641 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'st'
-[06-17 19:27:40.801 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "st"
-[06-17 19:27:40.801 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 's'
-[06-17 19:27:41.631 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "s"
-[06-17 19:27:41.733 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "st"
-[06-17 19:27:41.889 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "sto"
-[06-17 19:27:42.248 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "stop"
-[06-17 19:27:42.248 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:27:43.016 app.go:87 (*App).startTimer.func1.1] 🟢 timer.run завершается
-[06-17 19:27:44.316 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:44.417 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "n"
-[06-17 19:27:44.486 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:27:44.749 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "new"
-[06-17 19:27:44.749 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'ne'
-[06-17 19:27:44.919 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:27:44.920 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'n'
-[06-17 19:27:45.434 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "n"
-[06-17 19:27:45.522 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:27:45.822 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "new"
-[06-17 19:27:45.822 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:27:46.899 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:47.134 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "e"
-[06-17 19:27:47.261 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ex"
-[06-17 19:27:47.360 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exi"
-[06-17 19:27:47.623 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exit"
-[06-17 19:27:47.624 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'exi'
-[06-17 19:27:47.793 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exi"
-[06-17 19:27:47.793 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'ex'
-[06-17 19:27:47.948 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ex"
-[06-17 19:27:47.949 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'e'
-[06-17 19:27:49.072 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "e"
-[06-17 19:27:49.073 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: ''
-[06-17 19:27:49.694 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:49.773 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "n"
-[06-17 19:27:49.820 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:27:50.218 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "new"
-[06-17 19:27:50.219 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:27:52.250 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:52.376 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "n"
-[06-17 19:27:52.425 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:27:53.093 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "new"
-[06-17 19:27:53.093 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'ne'
-[06-17 19:27:53.262 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:27:53.263 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'n'
-[06-17 19:27:53.434 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "n"
-[06-17 19:27:53.434 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: ''
-[06-17 19:27:53.569 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:53.925 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:53.926 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:27:56.351 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:56.588 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "e"
-[06-17 19:27:56.695 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ex"
-[06-17 19:27:56.822 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exi"
-[06-17 19:27:57.260 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exit"
-[06-17 19:27:57.261 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'exi'
-[06-17 19:27:57.426 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exi"
-[06-17 19:27:57.427 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'ex'
-[06-17 19:27:57.588 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ex"
-[06-17 19:27:57.588 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'e'
-[06-17 19:27:57.779 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "e"
-[06-17 19:27:57.780 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: ''
-[06-17 19:27:58.524 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:58.524 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:27:59.568 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:27:59.740 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "e"
-[06-17 19:27:59.945 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ex"
-[06-17 19:28:00.497 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exi"
-[06-17 19:28:00.498 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:28:01.180 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:28:01.368 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "e"
-[06-17 19:28:01.476 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ex"
-[06-17 19:28:01.793 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exi"
-[06-17 19:28:01.794 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'ex'
-[06-17 19:28:02.171 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ex"
-[06-17 19:28:02.171 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:28:03.018 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:28:03.231 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "e"
-[06-17 19:28:03.855 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ex"
-[06-17 19:28:04.362 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exi"
-[06-17 19:28:04.362 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'ex'
-[06-17 19:28:04.535 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ex"
-[06-17 19:28:04.535 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'e'
-[06-17 19:28:04.718 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "e"
-[06-17 19:28:04.718 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: ''
-[06-17 19:28:05.304 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:28:05.335 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "n"
-[06-17 19:28:05.416 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:28:05.747 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "new"
-[06-17 19:28:05.747 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:28:07.424 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:28:07.670 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "e"
-[06-17 19:28:07.784 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ex"
-[06-17 19:28:08.046 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exi"
-[06-17 19:28:09.550 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exit"
-[06-17 19:28:09.550 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'exi'
-[06-17 19:28:10.076 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exi"
-[06-17 19:28:10.077 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:28:11.080 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:28:11.137 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "n"
-[06-17 19:28:11.212 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:28:11.471 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "new"
-[06-17 19:28:11.471 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:28:22.867 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:28:23.087 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "e"
-[06-17 19:28:23.234 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ex"
-[06-17 19:28:23.393 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exi"
-[06-17 19:28:23.641 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exit"
-[06-17 19:28:23.641 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'exi'
-[06-17 19:28:23.807 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exi"
-[06-17 19:28:23.807 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'ex'
-[06-17 19:28:24.019 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ex"
-[06-17 19:28:24.020 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:28:24.492 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:28:24.730 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "e"
-[06-17 19:28:24.846 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ex"
-[06-17 19:28:25.657 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "exi"
-[06-17 19:28:25.658 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'ex'
-[06-17 19:28:25.830 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ex"
-[06-17 19:28:25.830 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'e'
-[06-17 19:28:25.984 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "e"
-[06-17 19:28:25.984 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: ''
-[06-17 19:28:26.234 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:28:26.234 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:28:26.672 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:28:26.761 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "n"
-[06-17 19:28:26.818 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:28:27.216 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "new"
-[06-17 19:28:27.216 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:28:29.314 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:28:29.315 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "e"
-[06-17 19:28:29.380 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "en"
-[06-17 19:28:29.657 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "enw"
-[06-17 19:28:29.657 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:28:30.391 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:28:30.562 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "n"
-[06-17 19:28:30.614 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "ne"
-[06-17 19:28:30.819 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "new"
-[06-17 19:28:30.819 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:28:37.006 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:28:37.196 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "p"
-[06-17 19:28:37.505 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "pa"
-[06-17 19:28:37.930 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "pau"
-[06-17 19:28:37.930 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'pa'
-[06-17 19:28:38.088 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "pa"
-[06-17 19:28:38.089 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'p'
-[06-17 19:28:38.756 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "p"
-[06-17 19:28:38.903 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "pa"
-[06-17 19:28:39.007 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "pau"
-[06-17 19:28:39.056 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "paus"
-[06-17 19:28:39.330 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "pause"
-[06-17 19:28:39.330 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:28:42.109 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: ""
-[06-17 19:28:42.167 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "r"
-[06-17 19:28:42.583 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "re"
-[06-17 19:28:42.903 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "res"
-[06-17 19:28:42.904 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 're'
-[06-17 19:28:43.059 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "re"
-[06-17 19:28:43.060 cmd.go:64 handleKeyEvent] Buffer after rune-backspace: 'r'
-[06-17 19:28:43.592 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "r"
-[06-17 19:28:43.759 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "re"
-[06-17 19:28:43.852 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "res"
-[06-17 19:28:44.030 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "resu"
-[06-17 19:28:44.127 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "resum"
-[06-17 19:28:44.341 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400000c048 / content: "resume"
-[06-17 19:28:44.341 cmd.go:49 handleKeyEvent] in Enter
-[06-17 19:28:51.546 app.go:87 (*App).startTimer.func1.1] 🟢 timer.run завершается
+[06-17 19:34:26.934 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: ""
+[06-17 19:34:26.962 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "т"
+[06-17 19:34:27.037 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "ту"
+[06-17 19:34:27.343 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "туц"
+[06-17 19:34:28.417 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: ""
+[06-17 19:34:28.498 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "n"
+[06-17 19:34:28.554 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "ne"
+[06-17 19:34:29.041 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "new"
+[06-17 19:34:31.100 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: ""
+[06-17 19:34:31.154 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "p"
+[06-17 19:34:31.345 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "pa"
+[06-17 19:34:31.433 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "pau"
+[06-17 19:34:31.498 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "paus"
+[06-17 19:34:32.157 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "pause"
+[06-17 19:34:32.906 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: ""
+[06-17 19:34:32.947 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "r"
+[06-17 19:34:33.143 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "re"
+[06-17 19:34:33.228 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "res"
+[06-17 19:34:33.449 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "resu"
+[06-17 19:34:33.547 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "resum"
+[06-17 19:34:33.884 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "resume"
+[06-17 19:34:34.742 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: ""
+[06-17 19:34:34.922 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "s"
+[06-17 19:34:34.987 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "st"
+[06-17 19:34:35.142 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "sto"
+[06-17 19:34:35.371 cmd.go:46 handleKeyEvent] 🔎 buffer pointer: 0x1400031c030 / content: "stop"
+[06-17 19:34:36.059 app.go:87 (*App).startTimer.func1.1] 🟢 timer.run завершается
