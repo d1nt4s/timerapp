@@ -52,7 +52,7 @@ func (t *Timer) Run(s tcell.Screen) TimerResult {
 		}
 
 		t.tick()
-		drawBigTimer(s, t.Minutes, t.Seconds, 0, tcell.StyleDefault.Foreground(tcell.ColorWhite))
+		drawCenteredBigTimer(s, t.Minutes, t.Seconds, tcell.StyleDefault.Foreground(tcell.ColorWhite))
 		time.Sleep(time.Second)
 	}
 }
