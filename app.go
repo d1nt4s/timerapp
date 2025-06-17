@@ -29,6 +29,11 @@ func NewApp() *App {
 }
 
 func (a *App) Run() {
+	defer func() {
+		close(a.uiCommandCh) // Закрываем канал команд ТОЛЬКО здесь
+		Debug("🟢 Основной канал сырых команд закрылся")
+	}()
+
 	userNotice(a.screen, "⌨️  Введите команду (new / exit):")
 
 	a.timer = NewTimer(1, 0)
@@ -61,6 +66,7 @@ func (a *App) handleCommand(cmd string) bool {
 	case "exit":
 		return true
 	case "new":
+		a.timer = NewTimer(1, 0)
 		a.startTimer()
 	default:
 		userError(a.screen, "🤷 Неизвестная команда")
@@ -83,6 +89,12 @@ func (a *App) startTimer() {
 		}()
 		a.timer.Set(1, 0)
 		a.timer.Run(a.screen)
+
+		exitStatus := a.timer.Run(a.screen)
+
+		if exitStatus == TimerExitApp {
+			a.uiCommandCh <- "exit"
+		}
 
 	}()
 }

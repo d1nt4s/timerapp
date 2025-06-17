@@ -10,9 +10,17 @@ import (
 type TimerStatus int
 
 const (
-	Continue TimerStatus = iota
-	Pause
-	End
+	Continued TimerStatus = iota
+	Paused
+	Stopped
+	ExitApp
+)
+
+type TimerResult int
+
+const (
+	TimerStopped TimerResult = iota
+	TimerExitApp
 )
 
 type Command string
@@ -22,6 +30,7 @@ const (
 	CmdReset  Command = "reset"
 	CmdPause  Command = "pause"
 	CmdResume Command = "resume"
+	CmdExit   Command = "exit"
 )
 
 var commandMap = map[string]Command{
@@ -29,6 +38,7 @@ var commandMap = map[string]Command{
 	"reset":  CmdReset,
 	"pause":  CmdPause,
 	"resume": CmdResume,
+	"exit":   CmdExit,
 }
 
 func ParseCommand(input string) (Command, bool) {
@@ -48,12 +58,8 @@ func NewTimer(min, sec int) *Timer {
 		Minutes: min,
 		Seconds: sec,
 		control: make(chan Command),
-		status:  Continue,
+		status:  Continued,
 	}
-}
-
-func (t *Timer) ControlChan() chan Command {
-	return t.control
 }
 
 func (t *Timer) Set(min, sec int) {
@@ -61,16 +67,18 @@ func (t *Timer) Set(min, sec int) {
 	t.Seconds = sec
 }
 
-func (t *Timer) Run(s tcell.Screen) {
+func (t *Timer) Run(s tcell.Screen) TimerResult {
 	for {
 		t.handleCommands(s)
 
-		if t.status == End {
+		switch t.status {
+		case Stopped:
 			t.drainControlChan()
-			return
-		}
-
-		if t.status == Pause {
+			return TimerStopped
+		case ExitApp:
+			t.drainControlChan()
+			return TimerExitApp
+		case Paused:
 			time.Sleep(200 * time.Millisecond)
 			continue
 		}
@@ -84,7 +92,7 @@ func (t *Timer) Run(s tcell.Screen) {
 func (t *Timer) tick() {
 	if t.Seconds == 0 {
 		if t.Minutes == 0 {
-			t.status = End
+			t.status = Stopped
 			return
 		}
 		t.Minutes--
@@ -92,7 +100,7 @@ func (t *Timer) tick() {
 	} else {
 		t.Seconds--
 	}
-	t.status = Continue
+	t.status = Continued
 }
 
 func (t *Timer) handleCommands(screen tcell.Screen) {
@@ -100,17 +108,20 @@ func (t *Timer) handleCommands(screen tcell.Screen) {
 	case cmd := <-t.control:
 		switch cmd {
 		case CmdStop:
-			t.status = End
+			t.status = Stopped
 			userNotice(screen, "⏹ Таймер остановлен")
 		case CmdReset:
 			t.Set(0, 15)
 			userNotice(screen, "🔁 Таймер сброшен")
 		case CmdPause:
-			t.status = Pause
+			t.status = Paused
 			userNotice(screen, "⏸ Таймер на паузе")
 		case CmdResume:
-			t.status = Continue
+			t.status = Continued
 			userNotice(screen, "▶️ Таймер продолжается")
+		case CmdExit:
+			t.status = ExitApp
+			userNotice(screen, "❌ Запрошен выход из программы")
 		default:
 			userError(screen, "🤷 Неизвестная команда: "+string(cmd))
 		}

@@ -7,14 +7,30 @@ import (
 )
 
 func scanCommand(screen tcell.Screen, control chan string) {
+
 	var buffer []rune
 	eventChan := make(chan tcell.Event)
 
 	// Асинхронная проксирующая горутина
 	go func() {
+		defer Debug("🟢 event proxy завершается")
+
 		for {
-			event := screen.PollEvent()
-			eventChan <- event
+			select {
+			case <-control:
+				Debug("⛔ control канал закрыт — proxy завершён")
+				close(eventChan)
+				return
+
+			default:
+				ev := screen.PollEvent()
+
+				// защита от паники: проверим, не закрыт ли eventChan
+				select {
+				case eventChan <- ev:
+				default:
+				}
+			}
 		}
 	}()
 
@@ -28,19 +44,16 @@ func scanCommand(screen tcell.Screen, control chan string) {
 			screen.Sync()
 		}
 	}
+
 }
 
 func handleKeyEvent(ev *tcell.EventKey, screen tcell.Screen, buffer *[]rune, control chan string) (exit bool) {
 	switch ev.Key() {
 	case tcell.KeyEnter:
 		cmd := strings.ToLower(strings.TrimSpace(string(*buffer)))
-		Debug("Перед отправкой команды в канал: %s" + cmd)
+		Debug("Перед отправкой команды в канал: " + cmd)
 		control <- cmd
 		Debug("После отправки команды в канал")
-
-		if cmd == "exit" {
-			return true
-		}
 
 		clearInputLine(screen)
 		*buffer = nil
