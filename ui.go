@@ -8,17 +8,17 @@ import (
 )
 
 var bigFont = map[rune][]string{
-	'0': {" ███ ", "█   █", "█   █", "█   █", " ███ "},
-	'1': {"  █  ", " ██  ", "  █  ", "  █  ", "█████"},
-	'2': {"████ ", "    █", " ███ ", "█    ", "█████"},
-	'3': {"████ ", "    █", " ███ ", "    █", "████ "},
-	'4': {"█  █ ", "█  █ ", "█████", "   █ ", "   █ "},
-	'5': {"█████", "█    ", "████ ", "    █", "████ "},
-	'6': {" ███ ", "█    ", "████ ", "█   █", " ███ "},
-	'7': {"█████", "    █", "   █ ", "  █  ", "  █  "},
-	'8': {" ███ ", "█   █", " ███ ", "█   █", " ███ "},
-	'9': {" ███ ", "█   █", " ████", "    █", " ███ "},
-	':': {"     ", "  █  ", "     ", "  █  ", "     "},
+	'0': {" ██████ ", "██    ██", "██    ██", "██    ██", " ██████ ", "        ", "        "},
+	'1': {"   ██   ", " ████   ", "   ██   ", "   ██   ", " ██████ ", "        ", "        "},
+	'2': {" ██████ ", "     ██ ", " ██████ ", "██      ", "████████", "        ", "        "},
+	'3': {" ██████ ", "     ██ ", " █████  ", "     ██ ", " ██████ ", "        ", "        "},
+	'4': {"██   ██ ", "██   ██ ", "████████", "     ██ ", "     ██ ", "        ", "        "},
+	'5': {"████████", "██      ", "██████  ", "     ██ ", "██████  ", "        ", "        "},
+	'6': {" ██████ ", "██      ", "██████  ", "██   ██ ", " █████  ", "        ", "        "},
+	'7': {"████████", "     ██ ", "    ██  ", "   ██   ", "  ██    ", "        ", "        "},
+	'8': {" █████  ", "██   ██ ", " █████  ", "██   ██ ", " █████  ", "        ", "        "},
+	'9': {" █████  ", "██   ██ ", " ██████ ", "     ██ ", " █████  ", "        ", "        "},
+	':': {"        ", "   ██   ", "        ", "   ██   ", "        ", "        ", "        "},
 }
 
 // 🧼 Утилита: очистка строки
@@ -53,21 +53,26 @@ func drawFormattedMessage(s tcell.Screen, y int, style tcell.Style, format strin
 // ✅ Вывод больших цифр
 func drawBigTimer(s tcell.Screen, min, sec int, startY int, style tcell.Style) {
 	msg := fmt.Sprintf("%02d:%02d", min, sec)
-	height := 5
+	height := 7
 	w, _ := s.Size()
-
-	// очистка всей области вывода
-	for y := 0; y < height; y++ {
-		for x := 0; x < w; x++ {
-			s.SetContent(x, startY+y, ' ', nil, style)
+	totalWidth := 0
+	for _, ch := range msg {
+		if lines, ok := bigFont[ch]; ok {
+			totalWidth += runewidth.StringWidth(lines[0]) + 1
+		} else {
+			totalWidth += 8
 		}
 	}
+	x := (w - totalWidth) / 2
 
-	x := 0
+	for y := 0; y < height; y++ {
+		clearLine(s, startY+y, style)
+	}
+
 	for _, ch := range msg {
 		lines, ok := bigFont[ch]
 		if !ok {
-			x += 6 // просто пропускаем
+			x += 8
 			continue
 		}
 		for dy, line := range lines {
@@ -84,40 +89,48 @@ func drawBigTimer(s tcell.Screen, min, sec int, startY int, style tcell.Style) {
 
 func userNotice(s tcell.Screen, msg string) {
 	clearUserLines(s)
-	drawMessage(s, msg, 7, tcell.StyleDefault.Foreground(tcell.ColorWhite))
+	drawCenteredMessage(s, msg, 15, tcell.StyleDefault.Foreground(tcell.ColorWhite).Background(tcell.ColorBlue).Bold(true))
 }
 
 func userHint(s tcell.Screen, msg string) {
 	clearUserLines(s)
-	drawMessage(s, msg, 8, tcell.StyleDefault.Foreground(tcell.ColorYellow))
+	drawCenteredMessage(s, msg, 16, tcell.StyleDefault.Foreground(tcell.ColorYellow).Background(tcell.ColorBlack).Bold(true))
 }
 
 func userError(s tcell.Screen, msg string) {
 	clearUserLines(s)
-	drawMessage(s, msg, 9, tcell.StyleDefault.Foreground(tcell.ColorRed))
+	drawCenteredMessage(s, msg, 17, tcell.StyleDefault.Foreground(tcell.ColorRed).Background(tcell.ColorBlue).Bold(true))
+}
+
+func drawCenteredMessage(s tcell.Screen, msg string, y int, style tcell.Style) {
+	w, _ := s.Size()
+	x := (w - runewidth.StringWidth(msg)) / 2
+	clearLine(s, y, style)
+	printAt(s, x, y, msg, style)
+	s.Show()
 }
 
 func writeToInputLine(screen tcell.Screen, buffer []rune) {
-	width, height := screen.Size()
-	for x := 0; x < width; x++ {
-		screen.SetContent(x, height-1, ' ', nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
-	}
+	_, height := screen.Size()
+	y := height - 3
+	clearLine(screen, y, tcell.StyleDefault.Background(tcell.ColorBlack))
 	for i, r := range buffer {
-		screen.SetContent(i, height-1, r, nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
+		screen.SetContent(i, y, r, nil, tcell.StyleDefault.Foreground(tcell.ColorGreen).Bold(true))
 	}
 	screen.Show()
 }
 
 func clearInputLine(screen tcell.Screen) {
 	width, height := screen.Size()
+	y := height - 3
 	for x := 0; x < width; x++ {
-		screen.SetContent(x, height-1, ' ', nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
+		screen.SetContent(x, y, ' ', nil, tcell.StyleDefault.Background(tcell.ColorBlack))
 	}
 	screen.Show()
 }
 
 func clearUserLines(s tcell.Screen) {
-	for y := 7; y <= 9; y++ {
+	for y := 15; y <= 17; y++ {
 		clearLine(s, y, tcell.StyleDefault)
 	}
 	s.Show()
