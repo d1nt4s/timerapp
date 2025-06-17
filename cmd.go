@@ -3,6 +3,8 @@ package main
 import (
 	"strings"
 
+	"fmt"
+
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -24,12 +26,7 @@ func scanCommand(screen tcell.Screen, control chan string) {
 
 			default:
 				ev := screen.PollEvent()
-
-				// защита от паники: проверим, не закрыт ли eventChan
-				select {
-				case eventChan <- ev:
-				default:
-				}
+				eventChan <- ev
 			}
 		}
 	}()
@@ -37,9 +34,7 @@ func scanCommand(screen tcell.Screen, control chan string) {
 	for ev := range eventChan {
 		switch ev := ev.(type) {
 		case *tcell.EventKey:
-			if handleKeyEvent(ev, screen, &buffer, control) {
-				return // пользователь ввёл "exit" или нажал Ctrl+C
-			}
+			handleKeyEvent(ev, screen, &buffer, control)
 		case *tcell.EventResize:
 			screen.Sync()
 		}
@@ -47,51 +42,30 @@ func scanCommand(screen tcell.Screen, control chan string) {
 
 }
 
-func handleKeyEvent(ev *tcell.EventKey, screen tcell.Screen, buffer *[]rune, control chan string) (exit bool) {
+func handleKeyEvent(ev *tcell.EventKey, screen tcell.Screen, buffer *[]rune, control chan string) {
+	Debug(fmt.Sprintf("🔎 buffer pointer: %p / content: %q", buffer, string(*buffer)))
 	switch ev.Key() {
 	case tcell.KeyEnter:
+
 		cmd := strings.ToLower(strings.TrimSpace(string(*buffer)))
-		Debug("Перед отправкой команды в канал: " + cmd)
 		control <- cmd
-		Debug("После отправки команды в канал")
 
 		clearInputLine(screen)
 		*buffer = nil
 
-	case tcell.KeyBackspace:
-		if len(*buffer) > 0 {
-			*buffer = (*buffer)[:len(*buffer)-1]
-		}
-
-	case tcell.KeyCtrlC:
-		return true
-
 	default:
 		r := ev.Rune()
-		if r != 0 {
+
+		if r == 127 || r == '\b' || r == '\x08' {
+			if len(*buffer) > 0 {
+				*buffer = (*buffer)[:len(*buffer)-1]
+				writeToInputLine(screen, *buffer)
+			}
+		}
+
+		if r >= 32 && r != 127 {
 			*buffer = append(*buffer, r)
 			writeToInputLine(screen, *buffer)
 		}
 	}
-
-	return false
-}
-
-func writeToInputLine(screen tcell.Screen, buffer []rune) {
-	width, height := screen.Size()
-	for x := 0; x < width; x++ {
-		screen.SetContent(x, height-1, ' ', nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
-	}
-	for i, r := range buffer {
-		screen.SetContent(i, height-1, r, nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
-	}
-	screen.Show()
-}
-
-func clearInputLine(screen tcell.Screen) {
-	width, height := screen.Size()
-	for x := 0; x < width; x++ {
-		screen.SetContent(x, height-1, ' ', nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
-	}
-	screen.Show()
 }

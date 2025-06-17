@@ -50,8 +50,10 @@ Loop:
 
 	for cmd := range a.uiCommandCh {
 		if a.acceptingTimerCommands {
-			if parsed, ok := ParseCommand(cmd); ok {
+			if parsed, cleaned, ok := ParseCommand(cmd); ok {
 				a.timer.control <- parsed
+			} else {
+				userError(a.screen, "🤷 Команда \""+cleaned+"\" не распознана")
 			}
 		} else {
 			if a.handleCommand(cmd) {
@@ -69,7 +71,7 @@ func (a *App) handleCommand(cmd string) bool {
 		a.timer = NewTimer(1, 0)
 		a.startTimer()
 	default:
-		userError(a.screen, "🤷 Неизвестная команда")
+		userError(a.screen, "🤷 Неизвестная команда "+cmd)
 	}
 
 	return false

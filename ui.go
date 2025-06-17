@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/gdamore/tcell/v2"
 	"github.com/mattn/go-runewidth"
 )
@@ -82,13 +83,42 @@ func drawBigTimer(s tcell.Screen, min, sec int, startY int, style tcell.Style) {
 }
 
 func userNotice(s tcell.Screen, msg string) {
+	clearUserLines(s)
 	drawMessage(s, msg, 7, tcell.StyleDefault.Foreground(tcell.ColorWhite))
 }
 
 func userHint(s tcell.Screen, msg string) {
+	clearUserLines(s)
 	drawMessage(s, msg, 8, tcell.StyleDefault.Foreground(tcell.ColorYellow))
 }
 
 func userError(s tcell.Screen, msg string) {
+	clearUserLines(s)
 	drawMessage(s, msg, 9, tcell.StyleDefault.Foreground(tcell.ColorRed))
+}
+
+func writeToInputLine(screen tcell.Screen, buffer []rune) {
+	width, height := screen.Size()
+	for x := 0; x < width; x++ {
+		screen.SetContent(x, height-1, ' ', nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
+	}
+	for i, r := range buffer {
+		screen.SetContent(i, height-1, r, nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
+	}
+	screen.Show()
+}
+
+func clearInputLine(screen tcell.Screen) {
+	width, height := screen.Size()
+	for x := 0; x < width; x++ {
+		screen.SetContent(x, height-1, ' ', nil, tcell.StyleDefault.Foreground(tcell.ColorRed))
+	}
+	screen.Show()
+}
+
+func clearUserLines(s tcell.Screen) {
+	for y := 7; y <= 9; y++ {
+		clearLine(s, y, tcell.StyleDefault)
+	}
+	s.Show()
 }

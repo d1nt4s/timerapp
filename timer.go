@@ -41,10 +41,12 @@ var commandMap = map[string]Command{
 	"exit":   CmdExit,
 }
 
-func ParseCommand(input string) (Command, bool) {
-	cmd, ok := commandMap[strings.ToLower(strings.TrimSpace(input))]
-	return cmd, ok
+func ParseCommand(input string) (Command, string, bool) {
+	cleaned := strings.ToLower(strings.TrimSpace(input))
+	cmd, ok := commandMap[cleaned]
+	return cmd, cleaned, ok
 }
+
 
 type Timer struct {
 	Minutes int
