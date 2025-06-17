@@ -91,7 +91,7 @@ func (t *Timer) handleCommands(screen tcell.Screen) {
 			t.status = ExitApp
 			userNotice(screen, "❌ Запрошен выход из программы")
 		default:
-			userError(screen, "🤷 Неизвестная команда: "+string(cmd))
+			userError(screen, "⭔ Неизвестная команда: "+string(cmd))
 		}
 	default:
 	}

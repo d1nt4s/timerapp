@@ -3,8 +3,6 @@ package main
 import (
 	"strings"
 
-	"fmt"
-
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -43,7 +41,6 @@ func scanCommand(screen tcell.Screen, control chan string) {
 }
 
 func handleKeyEvent(ev *tcell.EventKey, screen tcell.Screen, buffer *[]rune, control chan string) {
-	Debug(fmt.Sprintf("🔎 buffer pointer: %p / content: %q", buffer, string(*buffer)))
 	switch ev.Key() {
 	case tcell.KeyEnter:
 

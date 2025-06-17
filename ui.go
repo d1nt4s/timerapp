@@ -52,7 +52,27 @@ func drawCenteredBigTimer(s tcell.Screen, min, sec int, style tcell.Style) {
 		}
 		x += runewidth.StringWidth(lines[0]) + 2
 	}
+
+	drawProgressBar(s, min, sec, scrHeight-4)
+
 	s.Show()
+}
+
+func drawProgressBar(s tcell.Screen, min, sec, y int) {
+	total := 60*min + sec
+	if total == 0 {
+		total = 1
+	}
+	scrWidth, _ := s.Size()
+	filled := int(float64(scrWidth) * (float64(total) / float64(60*min+60)))
+	style := tcell.StyleDefault.Foreground(tcell.ColorLightSkyBlue).Background(tcell.ColorBlack)
+	for x := 0; x < scrWidth; x++ {
+		char := '░'
+		if x < filled {
+			char = '█'
+		}
+		s.SetContent(x, y, char, nil, style)
+	}
 }
 
 func drawMessage(s tcell.Screen, msg string, y int, style tcell.Style) {
@@ -82,12 +102,19 @@ func userError(s tcell.Screen, msg string) {
 
 func writeToInputLine(screen tcell.Screen, buffer []rune) {
 	width, height := screen.Size()
-	style := tcell.StyleDefault.Foreground(tcell.ColorWhite).Background(tcell.ColorDarkSlateGray).Bold(true)
+	style := tcell.StyleDefault.Foreground(tcell.ColorHotPink).Background(tcell.ColorBlack).Bold(true)
+	prompt := "⮞ "
 	for x := 0; x < width; x++ {
 		screen.SetContent(x, height-1, ' ', nil, style)
 	}
-	for i, r := range buffer {
-		screen.SetContent(i, height-1, r, nil, style)
+	x := 0
+	for _, r := range prompt {
+		screen.SetContent(x, height-1, r, nil, style)
+		x += runewidth.RuneWidth(r)
+	}
+	for _, r := range buffer {
+		screen.SetContent(x, height-1, r, nil, style)
+		x += runewidth.RuneWidth(r)
 	}
 	screen.Show()
 }

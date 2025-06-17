@@ -53,7 +53,7 @@ Loop:
 			if parsed, cleaned, ok := ParseCommand(cmd); ok {
 				a.timer.control <- parsed
 			} else {
-				userError(a.screen, "🤷 Команда \""+cleaned+"\" не распознана")
+				userError(a.screen, "⭔ Команда \""+cleaned+"\" не распознана")
 			}
 		} else {
 			if a.handleCommand(cmd) {
@@ -71,7 +71,7 @@ func (a *App) handleCommand(cmd string) bool {
 		a.timer = NewTimer(1, 0)
 		a.startTimer()
 	default:
-		userError(a.screen, "🤷 Неизвестная команда "+cmd)
+		userError(a.screen, "⭔ Неизвестная команда "+cmd)
 	}
 
 	return false
@@ -86,7 +86,7 @@ func (a *App) startTimer() {
 			a.acceptingTimerCommands = false
 			Debug("🟢 timer.run завершается")
 			userNotice(a.screen, "⏱ Таймер завершён")
-			userHint(a.screen, "✏️  Введите 'new' или 'exit'")
+			userHint(a.screen, "🐲  Введите 'new' или 'exit'")
 
 		}()
 		a.timer.Set(1, 0)
