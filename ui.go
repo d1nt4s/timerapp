@@ -23,7 +23,7 @@ var bigFont = map[rune][]string{
 }
 
 func drawCenteredBigTimer(s tcell.Screen, min, sec int, style tcell.Style) {
-	s.Clear()
+	clearAllExceptInputLine(s)
 	msg := fmt.Sprintf("%02d:%02d", min, sec)
 	height := len(bigFont['0'])
 	width := 0
@@ -103,7 +103,7 @@ func userError(s tcell.Screen, msg string) {
 func writeToInputLine(screen tcell.Screen, buffer []rune) {
 	width, height := screen.Size()
 	style := tcell.StyleDefault.Foreground(tcell.ColorHotPink).Background(tcell.ColorBlack).Bold(true)
-	prompt := "⮞ "
+	prompt := "> "
 	for x := 0; x < width; x++ {
 		screen.SetContent(x, height-1, ' ', nil, style)
 	}
@@ -136,3 +136,15 @@ func clearUserLines(s tcell.Screen) {
 	}
 	s.Show()
 }
+
+func clearAllExceptInputLine(s tcell.Screen) {
+	width, height := s.Size()
+	style := tcell.StyleDefault
+
+	for y := 0; y < height-1; y++ { // height-1 = строка ввода
+		for x := 0; x < width; x++ {
+			s.SetContent(x, y, ' ', nil, style)
+		}
+	}
+}
+

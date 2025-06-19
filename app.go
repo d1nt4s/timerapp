@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"strings"
 
 	"github.com/gdamore/tcell/v2"
 )
@@ -64,12 +65,25 @@ Loop:
 }
 
 func (a *App) handleCommand(cmd string) bool {
-	switch cmd {
-	case "exit":
+	switch {
+	case cmd == "exit":
 		return true
-	case "new":
+	case cmd == "new":
 		a.timer = NewTimer(1, 0)
 		a.startTimer()
+	case strings.HasPrefix(cmd, "set"):
+		if min, sec, ok := parseTimeFromSetCommand(cmd); ok {
+			err := SaveSettings(Settings{DefaultMinutes: min, DefaultSeconds: sec})
+			if err != nil {
+				userError(a.screen, "💥 Ошибка при сохранении настроек")
+			} else {
+				userNotice(a.screen, "💾 Настройки по умолчанию сохранены!")
+			}
+			a.timer = NewTimer(min, sec)
+			a.startTimer()
+		} else {
+			userError(a.screen, "Введите в формате set mm:ss")
+		}
 	default:
 		userError(a.screen, "⭔ Неизвестная команда "+cmd)
 	}
@@ -89,7 +103,6 @@ func (a *App) startTimer() {
 			userHint(a.screen, "🐲  Введите 'new' или 'exit'")
 
 		}()
-		a.timer.Set(1, 0)
 		a.timer.Run(a.screen)
 
 		exitStatus := a.timer.Run(a.screen)

@@ -1,7 +1,4 @@
-[06-17 20:46:31.203 app.go:87 (*App).startTimer.func1.1] 🟢 timer.run завершается
-[06-17 20:46:40.980 app.go:87 (*App).startTimer.func1.1] 🟢 timer.run завершается
-[06-17 20:46:53.396 app.go:87 (*App).startTimer.func1.1] 🟢 timer.run завершается
-[06-17 20:46:55.201 app.go:34 (*App).Run.func1] 🟢 Основной канал сырых команд закрылся
-[06-17 20:46:55.201 cmd.go:21 scanCommand.func1] ⛔ control канал закрыт — proxy завершён
-[06-17 20:46:55.201 cmd.go:23 scanCommand.func1] 🟢 event proxy завершается
-[06-17 20:46:55.201 app.go:44 (*App).Run.func2.1] 🟢 scanCommand завершается
+[06-19 21:09:55.807 app.go:77 (*App).handleCommand] 1515
+[06-19 21:10:25.872 app.go:97 (*App).startTimer.func1.1] 🟢 timer.run завершается
+[06-19 21:10:30.871 app.go:77 (*App).handleCommand] 2020
+[06-19 21:11:00.938 app.go:97 (*App).startTimer.func1.1] 🟢 timer.run завершается
