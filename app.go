@@ -84,7 +84,6 @@ func (a *App) startTimer() {
 				userHint(a.screen, "🐲 Введите 'start' для повтора или 'exit'")
 				return
 			case TimerFinished:
-				Debugf(a.timer)
 			    continue
 			}
 		}

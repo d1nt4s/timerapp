@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"time"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/mattn/go-runewidth"
@@ -89,16 +90,20 @@ func drawMessage(s tcell.Screen, msg string, y int, style tcell.Style) {
 }
 
 func userNotice(s tcell.Screen, msg string) {
+	// drawMessageWithAutoClear(s, msg, 18, tcell.StyleDefault.Foreground(tcell.ColorAqua).Bold(true))
 	drawMessage(s, msg, 18, tcell.StyleDefault.Foreground(tcell.ColorAqua).Bold(true))
 }
 
 func userHint(s tcell.Screen, msg string) {
+	// drawMessageWithAutoClear(s, msg, 19, tcell.StyleDefault.Foreground(tcell.ColorGreen).Bold(true))
 	drawMessage(s, msg, 19, tcell.StyleDefault.Foreground(tcell.ColorGreen).Bold(true))
 }
 
 func userError(s tcell.Screen, msg string) {
+	// drawMessageWithAutoClear(s, msg, 20, tcell.StyleDefault.Foreground(tcell.ColorMaroon).Bold(true))
 	drawMessage(s, msg, 20, tcell.StyleDefault.Foreground(tcell.ColorMaroon).Bold(true))
 }
+
 
 func writeToInputLine(screen tcell.Screen, buffer []rune) {
 	width, height := screen.Size()
@@ -141,10 +146,27 @@ func clearAllExceptInputLine(s tcell.Screen) {
 	width, height := s.Size()
 	style := tcell.StyleDefault
 
-	for y := 0; y < height-1; y++ { // height-1 = строка ввода
+	for y := 0; y < height-1; y++ {
+		if y == 18 || y == 19 || y == 20 {
+			continue // Не трогаем строки с сообщениями
+		}
 		for x := 0; x < width; x++ {
 			s.SetContent(x, y, ' ', nil, style)
 		}
 	}
+}
+
+
+func drawMessageWithAutoClear(s tcell.Screen, msg string, line int, style tcell.Style) {
+	drawMessage(s, msg, line, style)
+
+	go func() {
+		time.Sleep(3 * time.Second)
+		width, _ := s.Size()
+		for x := 0; x < width; x++ {
+			s.SetContent(x, line, ' ', nil, tcell.StyleDefault)
+		}
+		s.Show()
+	}()
 }
 

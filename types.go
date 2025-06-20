@@ -30,6 +30,7 @@ const (
 	CmdPause  Command = "pause"
 	CmdResume Command = "resume"
 	CmdExit   Command = "exit"
+	CmdSkip   Command = "skip"
 )
 
 var commandMap = map[string]Command{
@@ -38,4 +39,5 @@ var commandMap = map[string]Command{
 	"pause":  CmdPause,
 	"resume": CmdResume,
 	"exit":   CmdExit,
+	"skip":   CmdSkip,
 }

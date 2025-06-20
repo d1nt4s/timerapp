@@ -52,7 +52,11 @@ func (t *Timer) handleCommands(screen tcell.Screen) {
 			t.status = Stopped
 			userNotice(screen, "⏹ Таймер остановлен")
 		case CmdReset:
-			t.Set(0, 15)
+			settings, err := LoadSettings()
+			if err != nil {
+				userError(screen, "💥 Ошибка при загрузке настроек")
+			}
+			t.Set(settings.PomodoroMinutes, settings.PomodoroSeconds)
 			userNotice(screen, "🔁 Таймер сброшен")
 		case CmdPause:
 			t.status = Paused
@@ -63,6 +67,9 @@ func (t *Timer) handleCommands(screen tcell.Screen) {
 		case CmdExit:
 			t.status = ExitApp
 			userNotice(screen, "❌ Запрошен выход из программы")
+		case CmdSkip:
+			t.changeMode(screen)
+			userNotice(screen, "Пропуск...")
 		default:
 			userError(screen, "⭔ Неизвестная команда: "+string(cmd))
 		}
