@@ -2,11 +2,13 @@ package main
 
 type TimerStatus int
 type TimerResult int
+type TimerMode int
 type Command string
 
 const (
 	Continued TimerStatus = iota
 	Paused
+	Finished
 	Stopped
 	ExitApp
 )
@@ -14,6 +16,12 @@ const (
 const (
 	TimerStopped TimerResult = iota
 	TimerExitApp
+	TimerFinished
+)
+
+const (
+	Pomodoro TimerMode = iota
+	Pause
 )
 
 const (

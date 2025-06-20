@@ -19,16 +19,23 @@ type Timer struct {
 	Seconds int
 	control chan Command
 	status  TimerStatus
+	mode TimerMode
 }
 
-func NewTimer(min, sec int) *Timer {
+func NewTimer(min, sec int, modes ...TimerMode) *Timer {
+	mode := Pomodoro 
+	if len(modes) > 0 {
+		mode = modes[0]
+	}
 	return &Timer{
 		Minutes: min,
 		Seconds: sec,
 		control: make(chan Command),
 		status:  Continued,
+		mode:    mode,
 	}
 }
+
 
 func (t *Timer) Set(min, sec int) {
 	t.Minutes = min
@@ -43,6 +50,10 @@ func (t *Timer) Run(s tcell.Screen) TimerResult {
 		case Stopped:
 			t.drainControlChan()
 			return TimerStopped
+		case Finished:
+			t.drainControlChan()
+			t.changeMode(s)
+			return TimerFinished
 		case ExitApp:
 			t.drainControlChan()
 			return TimerExitApp
@@ -55,12 +66,13 @@ func (t *Timer) Run(s tcell.Screen) TimerResult {
 		drawCenteredBigTimer(s, t.Minutes, t.Seconds, tcell.StyleDefault.Foreground(tcell.ColorWhite))
 		time.Sleep(time.Second)
 	}
+
 }
 
 func (t *Timer) tick() {
 	if t.Seconds == 0 {
 		if t.Minutes == 0 {
-			t.status = Stopped
+			t.status = Finished
 			return
 		}
 		t.Minutes--
@@ -80,3 +92,21 @@ func (t *Timer) drainControlChan() {
 		}
 	}
 }
+
+func (t *Timer) changeMode(s tcell.Screen) {
+	settings, err := LoadSettings()
+	if err != nil {
+		userError(s, "💥 Ошибка при загрузке настроек. Выставлены базовые настройки.")
+	}
+	switch t.mode {
+	case Pomodoro:
+		t.Set(settings.PauseMinutes, settings.PauseSeconds)
+		t.mode = Pause
+	case Pause:
+		t.Set(settings.PomodoroMinutes, settings.PomodoroSeconds)
+		t.mode = Pomodoro
+	}
+
+	t.status = Continued
+}
+

@@ -1,5 +1,22 @@
-[06-20 18:12:04.516 app.go:72 (*App).startTimer.func1.1] 🟢 timer.run завершается
-[06-20 18:12:06.439 app.go:33 (*App).Run.func1] 🟢 Основной канал сырых команд закрылся
-[06-20 18:12:06.440 cmd.go:21 scanCommand.func1] ⛔ control канал закрыт — proxy завершён
-[06-20 18:12:06.440 cmd.go:23 scanCommand.func1] 🟢 event proxy завершается
-[06-20 18:12:06.440 app.go:43 (*App).Run.func2.1] 🟢 scanCommand завершается
+[06-20 19:28:00.064 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:3, control:(chan main.Command)(0x140003ae000), status:0, mode:1}: %!s(MISSING)
+[06-20 19:28:04.074 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:5, control:(chan main.Command)(0x140003ae000), status:0, mode:0}: %!s(MISSING)
+[06-20 19:28:10.085 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:3, control:(chan main.Command)(0x140003ae000), status:0, mode:1}: %!s(MISSING)
+[06-20 19:28:14.094 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:5, control:(chan main.Command)(0x140003ae000), status:0, mode:0}: %!s(MISSING)
+[06-20 19:28:20.107 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:3, control:(chan main.Command)(0x140003ae000), status:0, mode:1}: %!s(MISSING)
+[06-20 19:28:24.116 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:5, control:(chan main.Command)(0x140003ae000), status:0, mode:0}: %!s(MISSING)
+[06-20 19:28:30.132 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:3, control:(chan main.Command)(0x140003ae000), status:0, mode:1}: %!s(MISSING)
+[06-20 19:28:34.140 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:5, control:(chan main.Command)(0x140003ae000), status:0, mode:0}: %!s(MISSING)
+[06-20 19:28:40.153 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:3, control:(chan main.Command)(0x140003ae000), status:0, mode:1}: %!s(MISSING)
+[06-20 19:28:44.164 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:5, control:(chan main.Command)(0x140003ae000), status:0, mode:0}: %!s(MISSING)
+[06-20 19:28:50.178 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:3, control:(chan main.Command)(0x140003ae000), status:0, mode:1}: %!s(MISSING)
+[06-20 19:28:54.186 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:5, control:(chan main.Command)(0x140003ae000), status:0, mode:0}: %!s(MISSING)
+[06-20 19:29:00.200 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:3, control:(chan main.Command)(0x140003ae000), status:0, mode:1}: %!s(MISSING)
+[06-20 19:29:04.211 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:5, control:(chan main.Command)(0x140003ae000), status:0, mode:0}: %!s(MISSING)
+[06-20 19:29:10.227 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:3, control:(chan main.Command)(0x140003ae000), status:0, mode:1}: %!s(MISSING)
+[06-20 19:29:14.236 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:5, control:(chan main.Command)(0x140003ae000), status:0, mode:0}: %!s(MISSING)
+[06-20 19:29:20.250 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:3, control:(chan main.Command)(0x140003ae000), status:0, mode:1}: %!s(MISSING)
+[06-20 19:29:24.259 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:5, control:(chan main.Command)(0x140003ae000), status:0, mode:0}: %!s(MISSING)
+[06-20 19:29:30.274 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:3, control:(chan main.Command)(0x140003ae000), status:0, mode:1}: %!s(MISSING)
+[06-20 19:29:34.284 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:5, control:(chan main.Command)(0x140003ae000), status:0, mode:0}: %!s(MISSING)
+[06-20 19:29:40.300 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:3, control:(chan main.Command)(0x140003ae000), status:0, mode:1}: %!s(MISSING)
+[06-20 19:29:44.311 app.go:87 (*App).startTimer.func1] &main.Timer{Minutes:0, Seconds:5, control:(chan main.Command)(0x140003ae000), status:0, mode:0}: %!s(MISSING)

@@ -6,6 +6,7 @@ import (
 	"runtime"
 	"strings"
 	"time"
+	"fmt"
 )
 
 var debugLog *log.Logger
@@ -46,4 +47,20 @@ func shortFuncName(full string) string {
 func shortFileName(full string) string {
 	parts := strings.Split(full, "/")
 	return parts[len(parts)-1]
+}
+
+func Debugf(obj any) {
+	pc, file, line, ok := runtime.Caller(1)
+	funcName := "unknown"
+	if ok {
+		if fn := runtime.FuncForPC(pc); fn != nil {
+			funcName = shortFuncName(fn.Name())
+		}
+	}
+
+	now := time.Now().Format("01-02 15:04:05.000")
+	shortFile := shortFileName(file)
+
+	formatted := fmt.Sprintf("%#v", obj) // печатает структуру с типами
+	debugLog.Printf("[%s %s:%d %s] %s", now, shortFile, line, funcName, formatted)
 }

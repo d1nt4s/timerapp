@@ -55,12 +55,21 @@ func LoadSettings() (Settings, error) {
 func (a *App) applyNewSettings(min, sec int, isPause bool) {
 	newSettings := Settings{}
 
+	oldSettings, err := LoadSettings();
+	if err != nil {
+		userError(a.screen, "💥 Ошибка при загрузки настроек")
+	}
+
 	if isPause {
 		newSettings.PauseMinutes = min
 		newSettings.PauseSeconds = sec
+		newSettings.PomodoroMinutes = oldSettings.PomodoroMinutes
+		newSettings.PomodoroSeconds = oldSettings.PomodoroSeconds
 	} else {
 		newSettings.PomodoroMinutes = min
 		newSettings.PomodoroSeconds = sec
+		newSettings.PauseMinutes = oldSettings.PauseMinutes
+		newSettings.PauseSeconds = oldSettings.PauseSeconds
 	}
 
 	if err := SaveSettings(newSettings); err != nil {

@@ -70,17 +70,25 @@ func (a *App) startTimer() {
 		defer func() {
 			a.acceptingTimerCommands = false
 			Debug("🟢 timer.run завершается")
-			userNotice(a.screen, "⏱ Таймер завершён")
-			userHint(a.screen, "🐲  Введите 'new' или 'exit'")
-
 		}()
-		a.timer.Run(a.screen)
 
-		exitStatus := a.timer.Run(a.screen)
+		for {
+			result := a.timer.Run(a.screen)
 
-		if exitStatus == TimerExitApp {
-			a.uiCommandCh <- "exit"
+			switch result {
+			case TimerExitApp:
+				a.uiCommandCh <- "exit"
+				return
+			case TimerStopped:
+				userNotice(a.screen, "⏱ Таймер остановлен")
+				userHint(a.screen, "🐲 Введите 'start' для повтора или 'exit'")
+				return
+			case TimerFinished:
+				Debugf(a.timer)
+			    continue
+			}
 		}
+
 
 	}()
 }
