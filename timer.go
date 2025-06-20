@@ -71,32 +71,6 @@ func (t *Timer) tick() {
 	t.status = Continued
 }
 
-func (t *Timer) handleCommands(screen tcell.Screen) {
-	select {
-	case cmd := <-t.control:
-		switch cmd {
-		case CmdStop:
-			t.status = Stopped
-			userNotice(screen, "⏹ Таймер остановлен")
-		case CmdReset:
-			t.Set(0, 15)
-			userNotice(screen, "🔁 Таймер сброшен")
-		case CmdPause:
-			t.status = Paused
-			userNotice(screen, "⏸ Таймер на паузе")
-		case CmdResume:
-			t.status = Continued
-			userNotice(screen, "▶️ Таймер продолжается")
-		case CmdExit:
-			t.status = ExitApp
-			userNotice(screen, "❌ Запрошен выход из программы")
-		default:
-			userError(screen, "⭔ Неизвестная команда: "+string(cmd))
-		}
-	default:
-	}
-}
-
 func (t *Timer) drainControlChan() {
 	for {
 		select {
