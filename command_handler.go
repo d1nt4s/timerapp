@@ -2,6 +2,7 @@ package main
 
 import (
 	"strings"
+
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -15,7 +16,7 @@ func (a *App) handleCommand(cmd string) bool {
 	case cmd == "start":
 		settings, err := LoadSettings()
 		if err != nil {
-			userError(a.screen, "💥 Ошибка при загрузке настроек")
+			userError(a.screen, "💥 Ошибка при загрузке настроек", false)
 			return false
 		}
 		a.timer = NewTimer(settings.PomodoroMinutes, settings.PomodoroSeconds)
@@ -25,18 +26,18 @@ func (a *App) handleCommand(cmd string) bool {
 		if min, sec, ok := parseTimeFromSetCommand(cmd, "set_timer"); ok {
 			a.applyNewSettings(min, sec, false)
 		} else {
-			userError(a.screen, "Введите в формате set_timer mm:ss")
+			userError(a.screen, "Введите в формате set_timer mm:ss", true)
 		}
 
 	case strings.HasPrefix(cmd, "set_pause"):
 		if min, sec, ok := parseTimeFromSetCommand(cmd, "set_pause"); ok {
 			a.applyNewSettings(min, sec, true)
 		} else {
-			userError(a.screen, "Введите в формате set_pause mm:ss")
+			userError(a.screen, "Введите в формате set_pause mm:ss", true)
 		}
 
 	default:
-		userError(a.screen, "⭔ Неизвестная команда "+cmd)
+		userError(a.screen, "⭔ Неизвестная команда "+cmd, true)
 	}
 
 	return false
@@ -50,28 +51,29 @@ func (t *Timer) handleCommands(screen tcell.Screen) {
 		switch cmd {
 		case CmdStop:
 			t.status = Stopped
-			userNotice(screen, "⏹ Таймер остановлен")
+			clearAllExceptInputLine(screen)
+			userNotice(screen, "⏹ Таймер остановлен", false)
 		case CmdReset:
 			settings, err := LoadSettings()
 			if err != nil {
-				userError(screen, "💥 Ошибка при загрузке настроек")
+				userError(screen, "💥 Ошибка при загрузке настроек", false)
 			}
 			t.Set(settings.PomodoroMinutes, settings.PomodoroSeconds)
-			userNotice(screen, "🔁 Таймер сброшен")
+			userNotice(screen, "🔁 Таймер сброшен", true)
 		case CmdPause:
 			t.status = Paused
-			userNotice(screen, "⏸ Таймер на паузе")
+			userNotice(screen, "⏸ Таймер на паузе", false)
 		case CmdResume:
 			t.status = Continued
-			userNotice(screen, "▶️ Таймер продолжается")
+			userNotice(screen, "▶️ Таймер продолжается", true)
 		case CmdExit:
 			t.status = ExitApp
-			userNotice(screen, "❌ Запрошен выход из программы")
+			userNotice(screen, "❌ Запрошен выход из программы", false)
 		case CmdSkip:
 			t.changeMode(screen)
-			userNotice(screen, "Пропуск...")
+			userNotice(screen, "Пропуск...", true)
 		default:
-			userError(screen, "⭔ Неизвестная команда: "+string(cmd))
+			userError(screen, "⭔ Неизвестная команда: "+string(cmd), true)
 		}
 	default:
 	}

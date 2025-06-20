@@ -33,7 +33,7 @@ func (a *App) Run() {
 		Debug("🟢 Основной канал сырых команд закрылся")
 	}()
 
-	userNotice(a.screen, "⌨️  Введите команду (start / exit / set mm:ss)")
+	userHello(a.screen, "⌨️  Введите команду (start / exit / set mm:ss)")
 
 	a.timer = NewTimer(1, 0)
 	a.acceptingTimerCommands = false
@@ -52,7 +52,7 @@ Loop:
 			if parsed, cleaned, ok := ParseCommand(cmd); ok {
 				a.timer.control <- parsed
 			} else {
-				userError(a.screen, "⭔ Команда \""+cleaned+"\" не распознана")
+				userError(a.screen, "⭔ Команда \""+cleaned+"\" не распознана", true)
 			}
 		} else {
 			if a.handleCommand(cmd) {
@@ -80,8 +80,8 @@ func (a *App) startTimer() {
 				a.uiCommandCh <- "exit"
 				return
 			case TimerStopped:
-				userNotice(a.screen, "⏱ Таймер остановлен")
-				userHint(a.screen, "🐲 Введите 'start' для повтора или 'exit'")
+				userNotice(a.screen, "⏱ Таймер остановлен", true)
+				userHint(a.screen, "🐲 Введите 'start' для повтора или 'exit'", false)
 				return
 			case TimerFinished:
 			    continue

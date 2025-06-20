@@ -57,7 +57,7 @@ func (a *App) applyNewSettings(min, sec int, isPause bool) {
 
 	oldSettings, err := LoadSettings();
 	if err != nil {
-		userError(a.screen, "💥 Ошибка при загрузки настроек")
+		userError(a.screen, "💥 Ошибка при загрузки настроек", false)
 	}
 
 	if isPause {
@@ -73,11 +73,11 @@ func (a *App) applyNewSettings(min, sec int, isPause bool) {
 	}
 
 	if err := SaveSettings(newSettings); err != nil {
-		userError(a.screen, "💥 Ошибка при сохранении настроек")
+		userError(a.screen, "💥 Ошибка при сохранении настроек", false)
 		return
 	}
 
-	userNotice(a.screen, "💾 Настройки по умолчанию сохранены!")
+	userNotice(a.screen, "💾 Настройки по умолчанию сохранены!", true)
 
 	a.timer = NewTimer(min, sec)
 	a.startTimer()

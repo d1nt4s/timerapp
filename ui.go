@@ -89,21 +89,36 @@ func drawMessage(s tcell.Screen, msg string, y int, style tcell.Style) {
 	s.Show()
 }
 
-func userNotice(s tcell.Screen, msg string) {
-	// drawMessageWithAutoClear(s, msg, 18, tcell.StyleDefault.Foreground(tcell.ColorAqua).Bold(true))
-	drawMessage(s, msg, 18, tcell.StyleDefault.Foreground(tcell.ColorAqua).Bold(true))
+func userHello(s tcell.Screen, msg string) {
+	drawMessage(s, msg, 17, tcell.StyleDefault.Foreground(tcell.ColorAqua).Bold(true))
 }
 
-func userHint(s tcell.Screen, msg string) {
-	// drawMessageWithAutoClear(s, msg, 19, tcell.StyleDefault.Foreground(tcell.ColorGreen).Bold(true))
-	drawMessage(s, msg, 19, tcell.StyleDefault.Foreground(tcell.ColorGreen).Bold(true))
+func userNotice(s tcell.Screen, msg string, toClear bool) {
+
+	if toClear {
+		drawMessageWithAutoClear(s, msg, 18, tcell.StyleDefault.Foreground(tcell.ColorAqua).Bold(true))
+	} else {
+		drawMessage(s, msg, 18, tcell.StyleDefault.Foreground(tcell.ColorAqua).Bold(true))
+	}
 }
 
-func userError(s tcell.Screen, msg string) {
-	// drawMessageWithAutoClear(s, msg, 20, tcell.StyleDefault.Foreground(tcell.ColorMaroon).Bold(true))
-	drawMessage(s, msg, 20, tcell.StyleDefault.Foreground(tcell.ColorMaroon).Bold(true))
+func userHint(s tcell.Screen, msg string, toClear bool) {
+
+	if toClear {
+		drawMessageWithAutoClear(s, msg, 19, tcell.StyleDefault.Foreground(tcell.ColorGreen).Bold(true))
+	} else {
+		drawMessage(s, msg, 19, tcell.StyleDefault.Foreground(tcell.ColorGreen).Bold(true))
+	}
 }
 
+func userError(s tcell.Screen, msg string, toClear bool) {
+
+	if toClear {
+		drawMessageWithAutoClear(s, msg, 20, tcell.StyleDefault.Foreground(tcell.ColorMaroon).Bold(true))
+	} else {
+		drawMessage(s, msg, 20, tcell.StyleDefault.Foreground(tcell.ColorMaroon).Bold(true))
+	}
+}
 
 func writeToInputLine(screen tcell.Screen, buffer []rune) {
 	width, height := screen.Size()
@@ -156,7 +171,6 @@ func clearAllExceptInputLine(s tcell.Screen) {
 	}
 }
 
-
 func drawMessageWithAutoClear(s tcell.Screen, msg string, line int, style tcell.Style) {
 	drawMessage(s, msg, line, style)
 
@@ -169,4 +183,3 @@ func drawMessageWithAutoClear(s tcell.Screen, msg string, line int, style tcell.
 		s.Show()
 	}()
 }
-

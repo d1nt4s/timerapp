@@ -7,5 +7,5 @@ func main() {
 
 	app.Run()
 
-	userNotice(app.screen, "👋 Программа завершена.")
+	userNotice(app.screen, "👋 Программа завершена.", false)
 }

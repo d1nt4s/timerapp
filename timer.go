@@ -96,7 +96,7 @@ func (t *Timer) drainControlChan() {
 func (t *Timer) changeMode(s tcell.Screen) {
 	settings, err := LoadSettings()
 	if err != nil {
-		userError(s, "💥 Ошибка при загрузке настроек. Выставлены базовые настройки.")
+		userError(s, "💥 Ошибка при загрузке настроек. Выставлены базовые настройки.", false)
 	}
 	switch t.mode {
 	case Pomodoro:
