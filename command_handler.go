@@ -22,19 +22,8 @@ func (a *App) handleCommand(cmd string) bool {
 		a.timer = NewTimer(settings.PomodoroMinutes, settings.PomodoroSeconds)
 		a.startTimer()
 
-	case strings.HasPrefix(cmd, "set_timer"):
-		if min, sec, ok := parseTimeFromSetCommand(cmd, "set_timer"); ok {
-			a.applyNewSettings(min, sec, false)
-		} else {
-			userError(a.screen, "Введите в формате set_timer mm:ss", true)
-		}
-
-	case strings.HasPrefix(cmd, "set_pause"):
-		if min, sec, ok := parseTimeFromSetCommand(cmd, "set_pause"); ok {
-			a.applyNewSettings(min, sec, true)
-		} else {
-			userError(a.screen, "Введите в формате set_pause mm:ss", true)
-		}
+	case strings.HasPrefix(cmd, "set_"):
+		a.handleSetCommand(cmd)
 
 	default:
 		userError(a.screen, "⭔ Неизвестная команда "+cmd, true)

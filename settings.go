@@ -6,12 +6,22 @@ import (
 	"path/filepath"
 )
 
+type SettingType int
+
+const (
+	PomodoroSetting SettingType = iota
+	PauseSetting
+	IntervalSetting
+)
+
 type Settings struct {
-	PomodoroMinutes int `json:"pomodoro_minutes"`
-	PomodoroSeconds int `json:"pomodoro_seconds"`
-	PauseMinutes int `json:"pause_minutes"`
-	PauseSeconds int `json:"pause_seconds"`
+	PomodoroMinutes   int `json:"pomodoro_minutes"`
+	PomodoroSeconds   int `json:"pomodoro_seconds"`
+	PauseMinutes      int `json:"pause_minutes"`
+	PauseSeconds      int `json:"pause_seconds"`
+	LongBreakInterval int `json:"long_break_interval"` // Новое поле
 }
+
 
 func getSettingsPath() (string, error) {
 	base, err := os.UserConfigDir()

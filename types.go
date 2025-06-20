@@ -22,6 +22,7 @@ const (
 const (
 	Pomodoro TimerMode = iota
 	Pause
+	LongPause
 )
 
 const (
