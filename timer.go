@@ -20,6 +20,7 @@ type Timer struct {
 	control chan Command
 	status  TimerStatus
 	mode TimerMode
+	pauseCounter int
 }
 
 func NewTimer(min, sec int, modes ...TimerMode) *Timer {
@@ -33,6 +34,7 @@ func NewTimer(min, sec int, modes ...TimerMode) *Timer {
 		control: make(chan Command),
 		status:  Continued,
 		mode:    mode,
+		pauseCounter: 0,
 	}
 }
 
@@ -100,9 +102,19 @@ func (t *Timer) changeMode(s tcell.Screen) {
 	}
 	switch t.mode {
 	case Pomodoro:
-		t.Set(settings.PauseMinutes, settings.PauseSeconds)
-		t.mode = Pause
+		if (t.pauseCounter == settings.LongBreakInterval) {
+			t.Set(settings.LongPauseMinutes, settings.LongPauseSeconds)
+			t.mode = LongPause
+		} else {
+			t.Set(settings.PauseMinutes, settings.PauseSeconds)
+			t.mode = Pause
+		}
 	case Pause:
+		t.pauseCounter++;
+		t.Set(settings.PomodoroMinutes, settings.PomodoroSeconds)
+		t.mode = Pomodoro
+	case LongPause:
+		t.pauseCounter = 0;
 		t.Set(settings.PomodoroMinutes, settings.PomodoroSeconds)
 		t.mode = Pomodoro
 	}

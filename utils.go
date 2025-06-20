@@ -14,6 +14,9 @@ func (a *App) handleSetCommand(cmd string) {
 	case strings.HasPrefix(cmd, "set_pause"):
 		a.updateSettingFromCommand(cmd, "set_pause", PauseSetting, false)
 
+	case strings.HasPrefix(cmd, "set_longpause"):
+		a.updateSettingFromCommand(cmd, "set_longpause", LongPauseSetting, false)
+
 	case strings.HasPrefix(cmd, "set_interval"):
 		a.updateSettingFromCommand(cmd, "set_interval", IntervalSetting, false)
 	}
@@ -27,17 +30,21 @@ func (a *App) updateSettingFromCommand(cmd, prefix string, settingType SettingTy
 	}
 
 	switch settingType {
-	case PomodoroSetting, PauseSetting:
+	case PomodoroSetting, PauseSetting, LongPauseSetting:
 		min, sec, ok := parseTimeFromSetCommand(cmd, prefix)
 		if !ok {
 			userError(a.screen, fmt.Sprintf("Введите в формате %s mm:ss", prefix), true)
 			return
 		}
 
-		if settingType == PomodoroSetting {
+		switch settingType {
+		case PomodoroSetting:
 			settings.PomodoroMinutes = min
 			settings.PomodoroSeconds = sec
-		} else {
+		case LongPauseSetting:
+			settings.LongPauseMinutes = min
+			settings.LongPauseSeconds = sec
+		case PauseSetting:
 			settings.PauseMinutes = min
 			settings.PauseSeconds = sec
 		}

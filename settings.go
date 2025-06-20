@@ -11,6 +11,7 @@ type SettingType int
 const (
 	PomodoroSetting SettingType = iota
 	PauseSetting
+	LongPauseSetting
 	IntervalSetting
 )
 
@@ -19,9 +20,22 @@ type Settings struct {
 	PomodoroSeconds   int `json:"pomodoro_seconds"`
 	PauseMinutes      int `json:"pause_minutes"`
 	PauseSeconds      int `json:"pause_seconds"`
-	LongBreakInterval int `json:"long_break_interval"` // Новое поле
+	LongPauseMinutes  int `json:"long_pause_minutes"`
+	LongPauseSeconds  int `json:"long_pause_seconds"`
+	LongBreakInterval int `json:"long_break_interval"` 
 }
 
+func DefaultSettingsCopy() Settings {
+	return Settings{
+		PomodoroMinutes:   25,
+		PomodoroSeconds:   0,
+		PauseMinutes:      5,
+		PauseSeconds:      0,
+		LongPauseMinutes:  15,
+		LongPauseSeconds:  0,
+		LongBreakInterval: 4,
+	}
+}
 
 func getSettingsPath() (string, error) {
 	base, err := os.UserConfigDir()
@@ -50,46 +64,15 @@ func SaveSettings(s Settings) error {
 func LoadSettings() (Settings, error) {
 	path, err := getSettingsPath()
 	if err != nil {
-		return Settings{PomodoroMinutes: 25, PomodoroSeconds: 0, PauseMinutes: 5, PauseSeconds: 1}, nil
+		return DefaultSettingsCopy(), nil
 	}
 	data, err := os.ReadFile(path)
 	if err != nil {
 		// Файл не найден — используем дефолт
-		return Settings{PomodoroMinutes: 25, PomodoroSeconds: 0, PauseMinutes: 5, PauseSeconds: 1}, nil
+		return DefaultSettingsCopy(), nil
 	}
 	var s Settings
 	err = json.Unmarshal(data, &s)
 	return s, err
-}
-
-func (a *App) applyNewSettings(min, sec int, isPause bool) {
-	newSettings := Settings{}
-
-	oldSettings, err := LoadSettings();
-	if err != nil {
-		userError(a.screen, "💥 Ошибка при загрузки настроек", false)
-	}
-
-	if isPause {
-		newSettings.PauseMinutes = min
-		newSettings.PauseSeconds = sec
-		newSettings.PomodoroMinutes = oldSettings.PomodoroMinutes
-		newSettings.PomodoroSeconds = oldSettings.PomodoroSeconds
-	} else {
-		newSettings.PomodoroMinutes = min
-		newSettings.PomodoroSeconds = sec
-		newSettings.PauseMinutes = oldSettings.PauseMinutes
-		newSettings.PauseSeconds = oldSettings.PauseSeconds
-	}
-
-	if err := SaveSettings(newSettings); err != nil {
-		userError(a.screen, "💥 Ошибка при сохранении настроек", false)
-		return
-	}
-
-	userNotice(a.screen, "💾 Настройки по умолчанию сохранены!", true)
-
-	a.timer = NewTimer(min, sec)
-	a.startTimer()
 }
 
