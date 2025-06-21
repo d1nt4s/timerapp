@@ -102,7 +102,7 @@ func (t *Timer) changeMode(s tcell.Screen) {
 	}
 	switch t.mode {
 	case Pomodoro:
-		if (t.pauseCounter == settings.LongBreakInterval) {
+		if (t.pauseCounter == settings.LongBreakInterval && settings.LongBreakInterval != 0) {
 			t.Set(settings.LongPauseMinutes, settings.LongPauseSeconds)
 			t.mode = LongPause
 		} else {

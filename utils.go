@@ -6,22 +6,6 @@ import (
 	"fmt"
 )
 
-func (a *App) handleSetCommand(cmd string) {
-	switch {
-	case strings.HasPrefix(cmd, "set_timer"):
-		a.updateSettingFromCommand(cmd, "set_timer", PomodoroSetting, true)
-
-	case strings.HasPrefix(cmd, "set_pause"):
-		a.updateSettingFromCommand(cmd, "set_pause", PauseSetting, false)
-
-	case strings.HasPrefix(cmd, "set_longpause"):
-		a.updateSettingFromCommand(cmd, "set_longpause", LongPauseSetting, false)
-
-	case strings.HasPrefix(cmd, "set_interval"):
-		a.updateSettingFromCommand(cmd, "set_interval", IntervalSetting, false)
-	}
-}
-
 func (a *App) updateSettingFromCommand(cmd, prefix string, settingType SettingType, startAfter bool) {
 	settings, err := LoadSettings()
 	if err != nil {

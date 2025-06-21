@@ -21,6 +21,9 @@ func (a *App) handleCommand(cmd string) bool {
 		}
 		a.timer = NewTimer(settings.PomodoroMinutes, settings.PomodoroSeconds)
 		a.startTimer()
+	
+	case cmd == "help":
+		drawLongNotice(a.screen, "Управляй настройкой таймера через следующие команды: set_timer mm:ss - для установки pomodoro, set_pause mm:ss - для установки паузы, set_longpause mm:ss - для установки долгой паузы, set_interval {value} - через сколько пауз будет длинная пауза. Для просмотра команд таймера введите help в режиме таймера.")
 
 	case strings.HasPrefix(cmd, "set_"):
 		a.handleSetCommand(cmd)
@@ -32,6 +35,22 @@ func (a *App) handleCommand(cmd string) bool {
 	return false
 }
 
+func (a *App) handleSetCommand(cmd string) {
+	switch {
+	case strings.HasPrefix(cmd, "set_timer"):
+		a.updateSettingFromCommand(cmd, "set_timer", PomodoroSetting, true)
+
+	case strings.HasPrefix(cmd, "set_pause"):
+		a.updateSettingFromCommand(cmd, "set_pause", PauseSetting, false)
+
+	case strings.HasPrefix(cmd, "set_longpause"):
+		a.updateSettingFromCommand(cmd, "set_longpause", LongPauseSetting, false)
+
+	case strings.HasPrefix(cmd, "set_interval"):
+		a.updateSettingFromCommand(cmd, "set_interval", IntervalSetting, false)
+	}
+}
+
 // Timer Handling
 
 func (t *Timer) handleCommands(screen tcell.Screen) {
@@ -40,7 +59,7 @@ func (t *Timer) handleCommands(screen tcell.Screen) {
 		switch cmd {
 		case CmdStop:
 			t.status = Stopped
-			clearAllExceptInputLine(screen)
+			clearAllExceptMessagesAndInputLine(screen)
 			userNotice(screen, "⏹ Таймер остановлен", false)
 		case CmdReset:
 			settings, err := LoadSettings()
@@ -61,6 +80,8 @@ func (t *Timer) handleCommands(screen tcell.Screen) {
 		case CmdSkip:
 			t.changeMode(screen)
 			userNotice(screen, "Пропуск...", true)
+		case CmdHelp:
+			drawLongNotice(screen, "Управляй таймером через следующие команды: stop - для полной остановки таймера, reset - для перезапуска таймера, pause - для приостановки таймера, resume - для возобновления таймера, exit - для выхода из таймера, skip - пропустить таймер.")
 		default:
 			userError(screen, "⭔ Неизвестная команда: "+string(cmd), true)
 		}

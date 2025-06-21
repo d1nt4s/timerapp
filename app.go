@@ -33,7 +33,7 @@ func (a *App) Run() {
 		Debug("🟢 Основной канал сырых команд закрылся")
 	}()
 
-	userHello(a.screen, "⌨️  Введите команду (start / exit / set mm:ss)")
+	userHello(a.screen, "⌨️  Введите команду (start / exit / help)")
 
 	a.timer = NewTimer(1, 0)
 	a.acceptingTimerCommands = false

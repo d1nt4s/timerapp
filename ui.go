@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"strings"
 	"time"
 
 	"github.com/gdamore/tcell/v2"
@@ -24,7 +25,7 @@ var bigFont = map[rune][]string{
 }
 
 func drawCenteredBigTimer(s tcell.Screen, min, sec int, style tcell.Style) {
-	clearAllExceptInputLine(s)
+	clearAllExceptMessagesAndInputLine(s)
 	msg := fmt.Sprintf("%02d:%02d", min, sec)
 	height := len(bigFont['0'])
 	width := 0
@@ -157,13 +158,13 @@ func clearUserLines(s tcell.Screen) {
 	s.Show()
 }
 
-func clearAllExceptInputLine(s tcell.Screen) {
+func clearAllExceptMessagesAndInputLine(s tcell.Screen) {
 	width, height := s.Size()
 	style := tcell.StyleDefault
 
 	for y := 0; y < height-1; y++ {
-		if y == 18 || y == 19 || y == 20 {
-			continue // Не трогаем строки с сообщениями
+		if y >= 18 && y <= 27 {
+			continue // Не очищаем строки с сообщениями (18–27)
 		}
 		for x := 0; x < width; x++ {
 			s.SetContent(x, y, ' ', nil, style)
@@ -182,4 +183,65 @@ func drawMessageWithAutoClear(s tcell.Screen, msg string, line int, style tcell.
 		}
 		s.Show()
 	}()
+}
+
+func drawLongNotice(s tcell.Screen, msg string) {
+
+	style := tcell.StyleDefault.Foreground(tcell.ColorLightGrey).Bold(true)
+
+	w, _ := s.Size()
+	lines := wrapText(msg, w-10) // немного шире, но с полями
+
+	startRow := 21
+	for i, line := range lines {
+		if i >= 6 {
+			break
+		}
+		drawCenteredText(s, line, startRow+i, style)
+	}
+	s.Show()
+
+	go func() {
+		time.Sleep(15 * time.Second)
+		for line := 21; line < 27; line++ {
+			width, _ := s.Size()
+			for x := range width {
+				s.SetContent(x, line, ' ', nil, tcell.StyleDefault)
+			}
+		}
+
+		s.Show()
+	}()
+}
+
+func drawCenteredText(s tcell.Screen, text string, row int, style tcell.Style) {
+	w, _ := s.Size()
+	textLen := runewidth.StringWidth(text) // учитывает ширину символов
+	startCol := (w - textLen) / 2
+	col := startCol
+
+	for _, r := range text {
+		s.SetContent(col, row, r, nil, style)
+		col += runewidth.RuneWidth(r)
+	}
+}
+
+func wrapText(text string, maxWidth int) []string {
+	var lines []string
+	words := strings.Fields(text)
+	if len(words) == 0 {
+		return []string{""}
+	}
+
+	current := words[0]
+	for _, word := range words[1:] {
+		if runewidth.StringWidth(current+" "+word) > maxWidth {
+			lines = append(lines, current)
+			current = word
+		} else {
+			current += " " + word
+		}
+	}
+	lines = append(lines, current)
+	return lines
 }
