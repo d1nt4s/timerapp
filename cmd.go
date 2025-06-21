@@ -17,7 +17,7 @@ func scanCommand(screen tcell.Screen, control chan string) {
 
 		for {
 			select {
-			case <-control:
+			case <-control: // single exit point - if channel control closed -> close scanCommand goroutine
 				Debug("⛔ control канал закрыт — proxy завершён")
 				close(eventChan)
 				return
@@ -35,6 +35,14 @@ func scanCommand(screen tcell.Screen, control chan string) {
 			handleKeyEvent(ev, screen, &buffer, control)
 		case *tcell.EventResize:
 			screen.Sync()
+		// case *tcell.EventMouse:
+		// 	x, y := ev.Position()
+		// 	if ev.Buttons()&tcell.Button1 != 0 {
+		// 		if cmd, ok := handleMouseForButtons(x, y, getVisibleButtons(screen)); ok {
+		// 			// handleCommand(cmd)
+		// 			control <- cmd
+		// 		}
+		// 	}
 		}
 	}
 

@@ -8,12 +8,12 @@ import (
 
 // UI handling
 
-func (a *App) handleCommand(cmd string) bool {
-	switch {
-	case cmd == "exit":
+func (a *App) handleCommand(cmd Command, cmd_string string) bool {
+	switch cmd {
+	case CmdExit:
 		return true
 
-	case cmd == "start":
+	case CmdStart:
 		settings, err := LoadSettings()
 		if err != nil {
 			userError(a.screen, "💥 Ошибка при загрузке настроек", false)
@@ -22,14 +22,14 @@ func (a *App) handleCommand(cmd string) bool {
 		a.timer = NewTimer(settings.PomodoroMinutes, settings.PomodoroSeconds)
 		a.startTimer()
 	
-	case cmd == "help":
+	case CmdHelp:
 		drawLongNotice(a.screen, "Управляй настройкой таймера через следующие команды: set_timer mm:ss - для установки pomodoro, set_pause mm:ss - для установки паузы, set_longpause mm:ss - для установки долгой паузы, set_interval {value} - через сколько пауз будет длинная пауза. Для просмотра команд таймера введите help в режиме таймера.")
 
-	case strings.HasPrefix(cmd, "set_"):
-		a.handleSetCommand(cmd)
+	case CmdSetPause, CmdSetTimer, CmdSetInterval, CmdSetLongPause:
+		a.handleSetCommand(cmd_string)
 
 	default:
-		userError(a.screen, "⭔ Неизвестная команда "+cmd, true)
+		userError(a.screen, "⭔ Неизвестная команда "+string(cmd), true)
 	}
 
 	return false

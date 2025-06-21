@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -48,16 +49,16 @@ func (a *App) Run() {
 Loop:
 
 	for cmd := range a.uiCommandCh {
-		if a.acceptingTimerCommands {
-			if parsed, cleaned, ok := ParseCommand(cmd); ok {
+		if parsed, cleaned, ok := ParseCommand(cmd); ok {
+			if a.acceptingTimerCommands {
 				a.timer.control <- parsed
 			} else {
-				userError(a.screen, "⭔ Команда \""+cleaned+"\" не распознана", true)
+				if a.handleCommand(parsed, cleaned) {
+					break Loop
+				}
 			}
 		} else {
-			if a.handleCommand(cmd) {
-				break Loop
-			}
+			userError(a.screen, "⭔ Команда \""+cleaned+"\" не распознана", true)
 		}
 	}
 }
@@ -84,10 +85,9 @@ func (a *App) startTimer() {
 				userHint(a.screen, "🐲 Введите 'start' для повтора или 'exit'", false)
 				return
 			case TimerFinished:
-			    continue
+				continue
 			}
 		}
-
 
 	}()
 }

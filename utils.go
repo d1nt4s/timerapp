@@ -6,6 +6,28 @@ import (
 	"fmt"
 )
 
+func ParseCommand(input string) (Command, string, bool) {
+	cleaned := strings.ToLower(strings.TrimSpace(input))
+
+	if cmd, ok := commandMap[cleaned]; ok {
+		return cmd, cleaned, true
+	}
+
+	switch {
+	case strings.HasPrefix(cleaned, "set_timer"):
+		return "set_timer", cleaned, true
+	case strings.HasPrefix(cleaned, "set_pause"):
+		return "set_pause", cleaned, true
+	case strings.HasPrefix(cleaned, "set_interval"):
+		return "set_interval", cleaned, true
+	case strings.HasPrefix(cleaned, "set_long_pause"):
+		return "set_longpause", cleaned, true
+	}
+
+	return "", cleaned, false
+}
+
+
 func (a *App) updateSettingFromCommand(cmd, prefix string, settingType SettingType, startAfter bool) {
 	settings, err := LoadSettings()
 	if err != nil {

@@ -1,43 +1,34 @@
 package main
 
 import (
-	"strings"
 	"time"
 
 	"github.com/gdamore/tcell/v2"
 )
 
-func ParseCommand(input string) (Command, string, bool) {
-	cleaned := strings.ToLower(strings.TrimSpace(input))
-	cmd, ok := commandMap[cleaned]
-	return cmd, cleaned, ok
-}
-
-
 type Timer struct {
-	Minutes int
-	Seconds int
-	control chan Command
-	status  TimerStatus
-	mode TimerMode
+	Minutes      int
+	Seconds      int
+	control      chan Command
+	status       TimerStatus
+	mode         TimerMode
 	pauseCounter int
 }
 
 func NewTimer(min, sec int, modes ...TimerMode) *Timer {
-	mode := Pomodoro 
+	mode := Pomodoro
 	if len(modes) > 0 {
 		mode = modes[0]
 	}
 	return &Timer{
-		Minutes: min,
-		Seconds: sec,
-		control: make(chan Command),
-		status:  Continued,
-		mode:    mode,
+		Minutes:      min,
+		Seconds:      sec,
+		control:      make(chan Command),
+		status:       Continued,
+		mode:         mode,
 		pauseCounter: 0,
 	}
 }
-
 
 func (t *Timer) Set(min, sec int) {
 	t.Minutes = min
@@ -102,7 +93,7 @@ func (t *Timer) changeMode(s tcell.Screen) {
 	}
 	switch t.mode {
 	case Pomodoro:
-		if (t.pauseCounter == settings.LongBreakInterval && settings.LongBreakInterval != 0) {
+		if t.pauseCounter == settings.LongBreakInterval && settings.LongBreakInterval != 0 {
 			t.Set(settings.LongPauseMinutes, settings.LongPauseSeconds)
 			t.mode = LongPause
 		} else {
@@ -110,15 +101,14 @@ func (t *Timer) changeMode(s tcell.Screen) {
 			t.mode = Pause
 		}
 	case Pause:
-		t.pauseCounter++;
+		t.pauseCounter++
 		t.Set(settings.PomodoroMinutes, settings.PomodoroSeconds)
 		t.mode = Pomodoro
 	case LongPause:
-		t.pauseCounter = 0;
+		t.pauseCounter = 0
 		t.Set(settings.PomodoroMinutes, settings.PomodoroSeconds)
 		t.mode = Pomodoro
 	}
 
 	t.status = Continued
 }
-
