@@ -57,6 +57,7 @@ func (t *Timer) Run(s tcell.Screen) TimerResult {
 
 		t.tick()
 		drawCenteredBigTimer(s, t.Minutes, t.Seconds, tcell.StyleDefault.Foreground(tcell.ColorWhite))
+		drawTimerModeLabel(s, t.mode)
 		time.Sleep(time.Second)
 	}
 

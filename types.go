@@ -51,4 +51,12 @@ var commandMap = map[string]Command{
 	"help":   	CmdHelp,
 	"start":  	CmdStart,
 	"settings": CmdSettings,
+	"s": 		CmdStart,
+	"st": 		CmdStop,
+	"res":		CmdReset,
+	"p": 		CmdPause,
+	"r": 		CmdResume,
+	"e":		CmdExit,
+	"sk":		CmdSkip,
+	"h":		CmdHelp,
 }

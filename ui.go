@@ -260,3 +260,39 @@ func clearBigTimerArea(s tcell.Screen) {
 
 	s.Show()
 }
+
+func drawTimerModeLabel(s tcell.Screen, mode TimerMode) {
+	scrWidth, scrHeight := s.Size()
+	height := len(bigFont['0'])
+
+	// Y-позиция: строка сразу под big timer'ом
+	y := int(math.Max(float64((scrHeight-height)/2+height), 1))
+
+	// Очистим всю строку
+	for x := 0; x < scrWidth; x++ {
+		s.SetContent(x, y, ' ', nil, tcell.StyleDefault)
+	}
+
+	// Подбираем лейбл
+	label := ""
+	switch mode {
+	case Pomodoro:
+		label = "Pomodoro"
+	case Pause:
+		label = "Pause"
+	case LongPause:
+		label = "Long Pause"
+	}
+
+	// Стиль лейбла
+	style := tcell.StyleDefault.
+		Foreground(tcell.ColorLightGoldenrodYellow).
+		Background(tcell.ColorBlack).
+		Bold(true)
+
+	// Центрированный вывод
+	drawCenteredText(s, label, y, style)
+
+	s.Show()
+}
+

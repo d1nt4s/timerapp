@@ -62,7 +62,6 @@ func (t *Timer) handleCommands(screen tcell.Screen) {
 		switch cmd {
 		case CmdStop:
 			t.status = Stopped
-			// clearAllExceptMessagesAndInputLine(screen)
 			clearBigTimerArea(screen)
 			userNotice(screen, "⏹ Таймер остановлен", false)
 		case CmdReset:
