@@ -21,7 +21,7 @@ func (a *App) handleCommand(cmd Command, cmd_string string) bool {
 		}
 		a.timer = NewTimer(settings.PomodoroMinutes, settings.PomodoroSeconds)
 		a.startTimer()
-	
+
 	case CmdHelp:
 		drawLongNotice(a.screen, "Управляй настройкой таймера через следующие команды: set_timer mm:ss - для установки pomodoro, set_pause mm:ss - для установки паузы, set_longpause mm:ss - для установки долгой паузы, set_interval {value} - через сколько пауз будет длинная пауза. Для просмотра команд таймера введите help в режиме таймера.")
 
@@ -85,6 +85,28 @@ func (t *Timer) handleCommands(screen tcell.Screen) {
 			userNotice(screen, "Пропуск...", true)
 		case CmdHelp:
 			drawLongNotice(screen, "Управляй таймером через следующие команды: stop - для полной остановки таймера, reset - для перезапуска таймера, pause - для приостановки таймера, resume - для возобновления таймера, exit - для выхода из таймера, skip - пропустить таймер.")
+
+		case CmdSnooze5Minutes:
+			if t.mode == Pause || t.mode == LongPause {
+				// обработка: добавляем 5 минут активной Pomodoro-сессии
+				t.Set(5, 0)
+				t.pauseCounter--
+				t.mode = Pomodoro
+				userNotice(screen, "⏱ Добавлено 5 минут фокуса", true)
+			} else {
+				userError(screen, "⭔ 5 минут можно добавить только в режиме паузы", true)
+			}
+
+		case CmdSnooze10Minutes:
+			if t.mode == Pause || t.mode == LongPause {
+				t.Set(10, 0)
+				t.pauseCounter--
+				t.mode = Pomodoro
+				userNotice(screen, "⏱ Добавлено 10 минут фокуса", true)
+			} else {
+				userError(screen, "⭔ 10 минут можно добавить только в режиме паузы", true)
+			}
+
 		default:
 			userError(screen, "⭔ Неизвестная команда: "+string(cmd), true)
 		}

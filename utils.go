@@ -20,7 +20,7 @@ func ParseCommand(input string) (Command, string, bool) {
 		return "set_pause", cleaned, true
 	case strings.HasPrefix(cleaned, "set_interval"):
 		return "set_interval", cleaned, true
-	case strings.HasPrefix(cleaned, "set_long_pause"):
+	case strings.HasPrefix(cleaned, "set_longpause"):
 		return "set_longpause", cleaned, true
 	}
 

@@ -36,9 +36,11 @@ const (
 	CmdSetTimer     Command = "set_timer"
 	CmdSetPause     Command = "set_pause"
 	CmdSetInterval  Command = "set_interval"
-	CmdSetLongPause Command = "set_long_pause"
+	CmdSetLongPause Command = "set_longpause"
 	CmdStart  		Command = "start"
 	CmdSettings 	Command = "settings"
+	CmdSnooze5Minutes	Command = "snooze5m"
+	CmdSnooze10Minutes	Command = "snooze10m"
 )
 
 var commandMap = map[string]Command{
@@ -59,4 +61,6 @@ var commandMap = map[string]Command{
 	"e":		CmdExit,
 	"sk":		CmdSkip,
 	"h":		CmdHelp,
+	"snooze5m": CmdSnooze5Minutes,
+	"snooze10m": CmdSnooze10Minutes,
 }

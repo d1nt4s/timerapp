@@ -49,16 +49,38 @@ func getButtons(screen tcell.Screen, mode AppMode) []Button {
 
 	// Кнопки для ActiveMode
 	if mode == ActiveMode {
-		buttons = []Button{
-			{Label: "[pause]", Command: "pause", X: 12, Y: startY, Visible: true},
-			{Label: "[resume]", Command: "resume", X: 22, Y: startY, Visible: true},
-			{Label: "[reset]", Command: "reset", X: 32, Y: startY, Visible: true},
-			{Label: "[stop]", Command: "stop", X: 42, Y: startY, Visible: true},
-			{Label: "[skip]", Command: "skip", X: 52, Y: startY, Visible: true},
-			{Label: "[help]", Command: "help", X: 62, Y: startY, Visible: true},
-			{Label: "[exit]", Command: "exit", X: 72, Y: startY, Visible: true},
+		width, _ := screen.Size() // получаем ширину экрана
+		buttonLabels := []struct {
+			Label   string
+			Command string
+		}{
+			{"[pause]", "pause"},
+			{"[resume]", "resume"},
+			{"[reset]", "reset"},
+			{"[stop]", "stop"},
+			{"[skip]", "skip"},
+			{"[snooze5m]", "snooze5m"},
+			{"[snooze10m]", "snooze10m"},
+			{"[help]", "help"},
+			{"[exit]", "exit"},
+		}
+
+		totalButtons := len(buttonLabels)
+		spacePerButton := width / totalButtons
+
+		buttons = []Button{}
+		for i, item := range buttonLabels {
+			x := i*spacePerButton + (spacePerButton-len(item.Label))/2 // центрируем каждую кнопку в своём слоте
+			buttons = append(buttons, Button{
+				Label:   item.Label,
+				Command: item.Command,
+				X:       x,
+				Y:       startY,
+				Visible: true,
+			})
 		}
 	}
+
 
 	return buttons
 }
