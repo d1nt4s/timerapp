@@ -32,40 +32,49 @@ func handleMouseForButtons(x, y int, buttons []Button) (string, bool) {
 	return "", false
 }
 
-func getVisibleButtons(screen tcell.Screen) []Button {
+func getButtons(screen tcell.Screen, mode AppMode) []Button {
 	_, screenHeight := screen.Size()
 	startY := screenHeight - 3
 
-	buttons := []Button{
-		{Label: "[start]", Command: "start", X: 2, Y: startY},
-		{Label: "[pause]", Command: "pause", X: 12, Y: startY},
-		{Label: "[resume]", Command: "resume", X: 22, Y: startY},
-		{Label: "[reset]", Command: "reset", X: 34, Y: startY},
-		{Label: "[stop]", Command: "stop", X: 44, Y: startY},
-		{Label: "[skip]", Command: "skip", X: 54, Y: startY},
-		{Label: "[help]", Command: "help", X: 64, Y: startY},
-		{Label: "[exit]", Command: "exit", X: 74, Y: startY},
+	var buttons []Button
+
+	// Кнопки для SetupMode
+	if mode == SetupMode {
+		buttons = []Button{
+			{Label: "[start]", Command: "start", X: 12, Y: startY, Visible: true},
+			{Label: "[help]", Command: "help", X: 22, Y: startY, Visible: true},
+			{Label: "[exit]", Command: "exit", X: 32, Y: startY, Visible: true},
+		}
 	}
 
-	// Показываем только кнопки, соответствующие текущему состоянию таймера
-	for i := range buttons {
-		switch buttons[i].Command {
-		case "start":
-			// buttons[i].Visible = app.timer == nil || app.timer.status == Stopped
-		case "pause":
-			// buttons[i].Visible = app.timer != nil && app.timer.status == Continued
-		case "resume":
-			// buttons[i].Visible = app.timer != nil && app.timer.status == Paused
-		case "reset", "stop", "skip":
-			// buttons[i].Visible = app.timer != nil && (app.timer.status == Continued || app.timer.status == Paused)
-		case "help", "exit":
-			buttons[i].Visible = true
+	// Кнопки для ActiveMode
+	if mode == ActiveMode {
+		buttons = []Button{
+			{Label: "[pause]", Command: "pause", X: 12, Y: startY, Visible: true},
+			{Label: "[resume]", Command: "resume", X: 22, Y: startY, Visible: true},
+			{Label: "[reset]", Command: "reset", X: 32, Y: startY, Visible: true},
+			{Label: "[stop]", Command: "stop", X: 42, Y: startY, Visible: true},
+			{Label: "[skip]", Command: "skip", X: 52, Y: startY, Visible: true},
+			{Label: "[help]", Command: "help", X: 62, Y: startY, Visible: true},
+			{Label: "[exit]", Command: "exit", X: 72, Y: startY, Visible: true},
 		}
 	}
 
 	return buttons
 }
 
+
 func inRect(mx, my, x, y, w, h int) bool {
 	return mx >= x && mx < x+w && my >= y && my < y+h
+}
+
+func clearButtonLine(s tcell.Screen) {
+	width, height := s.Size()
+	y := height - 3 // строка, на которой рисуются кнопки
+
+	for x := 0; x < width; x++ {
+		s.SetContent(x, y, ' ', nil, tcell.StyleDefault)
+	}
+
+	s.Show()
 }

@@ -6,11 +6,18 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
+type AppMode int
+
+const (
+	SetupMode AppMode = iota
+	ActiveMode
+)
+
 type App struct {
 	screen                 tcell.Screen
 	timer                  *Timer
 	uiCommandCh            chan string
-	acceptingTimerCommands bool
+	mode 				   AppMode					
 }
 
 func NewApp() *App {
@@ -21,10 +28,15 @@ func NewApp() *App {
 	if err := screen.Init(); err != nil {
 		log.Fatalf("ошибка инициализации экрана: %v", err)
 	}
+	screen.EnableMouse()
+
+	drawButtons(screen, getButtons(screen, SetupMode), tcell.StyleDefault.Foreground(tcell.ColorAqua).Bold(true))
 
 	return &App{
 		screen:      screen,
+		timer: 	     NewTimer(1, 0),
 		uiCommandCh: make(chan string),
+		mode: 		 SetupMode,
 	}
 }
 
@@ -35,22 +47,26 @@ func (a *App) Run() {
 	}()
 
 	userHello(a.screen, Msg_введите_команду_start_exit_help)
+	// a.changeMode()
 
-	a.timer = NewTimer(1, 0)
-	a.acceptingTimerCommands = false
+	// a.timer = NewTimer(1, 0)
+	// a.mode = SetupMode
+
+	// drawButtons(a.screen, getButtons(a.screen, a.mode), tcell.StyleDefault.Foreground(tcell.ColorAqua).Bold(true))
 
 	go func() {
 		defer func() {
 			Debug("🟢 scanCommand завершается")
 		}()
-		scanCommand(a.screen, a.uiCommandCh)
+		scanCommand(a)
 	}()
 
 Loop:
 
 	for cmd := range a.uiCommandCh {
 		if parsed, cleaned, ok := ParseCommand(cmd); ok {
-			if a.acceptingTimerCommands {
+			if a.mode == ActiveMode {
+				// drawButtons(a.screen, getButtons(a.screen, a.mode), tcell.StyleDefault.Foreground(tcell.ColorAqua).Bold(true))
 				a.timer.control <- parsed
 			} else {
 				if a.handleCommand(parsed, cleaned) {
@@ -65,11 +81,11 @@ Loop:
 
 func (a *App) startTimer() {
 
-	a.acceptingTimerCommands = true
+	a.changeMode()
 
 	go func() {
 		defer func() {
-			a.acceptingTimerCommands = false
+			a.changeMode()
 			Debug("🟢 timer.run завершается")
 		}()
 
@@ -90,4 +106,15 @@ func (a *App) startTimer() {
 		}
 
 	}()
+}
+
+func (a *App) changeMode() {
+	if (a.mode == SetupMode) {
+		a.mode = ActiveMode
+	} else {
+		a.mode = SetupMode
+	}
+
+	clearButtonLine(a.screen)
+	drawButtons(a.screen, getButtons(a.screen, a.mode), tcell.StyleDefault.Foreground(tcell.ColorAqua).Bold(true))
 }

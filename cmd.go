@@ -6,7 +6,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-func scanCommand(screen tcell.Screen, control chan string) {
+func scanCommand(app *App) {
 
 	var buffer []rune
 	eventChan := make(chan tcell.Event)
@@ -17,13 +17,13 @@ func scanCommand(screen tcell.Screen, control chan string) {
 
 		for {
 			select {
-			case <-control: // single exit point - if channel control closed -> close scanCommand goroutine
-				Debug("⛔ control канал закрыт — proxy завершён")
+			case <-app.uiCommandCh: // single exit point - if channel control closed -> close scanCommand goroutine
+				Debug("⛔ uiCommandCh канал закрыт — proxy завершён")
 				close(eventChan)
 				return
 
 			default:
-				ev := screen.PollEvent()
+				ev := app.screen.PollEvent()
 				eventChan <- ev
 			}
 		}
@@ -32,17 +32,16 @@ func scanCommand(screen tcell.Screen, control chan string) {
 	for ev := range eventChan {
 		switch ev := ev.(type) {
 		case *tcell.EventKey:
-			handleKeyEvent(ev, screen, &buffer, control)
+			handleKeyEvent(ev, app.screen, &buffer, app.uiCommandCh)
 		case *tcell.EventResize:
-			screen.Sync()
-		// case *tcell.EventMouse:
-		// 	x, y := ev.Position()
-		// 	if ev.Buttons()&tcell.Button1 != 0 {
-		// 		if cmd, ok := handleMouseForButtons(x, y, getVisibleButtons(screen)); ok {
-		// 			// handleCommand(cmd)
-		// 			control <- cmd
-		// 		}
-		// 	}
+			app.screen.Sync()
+		case *tcell.EventMouse:
+			x, y := ev.Position()
+			if ev.Buttons()&tcell.Button1 != 0 {
+				if cmd, ok := handleMouseForButtons(x, y, getButtons(app.screen, app.mode)); ok {
+					app.uiCommandCh <- cmd
+				}
+			}
 		}
 	}
 

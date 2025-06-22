@@ -25,7 +25,8 @@ var bigFont = map[rune][]string{
 }
 
 func drawCenteredBigTimer(s tcell.Screen, min, sec int, style tcell.Style) {
-	clearAllExceptMessagesAndInputLine(s)
+	// clearAllExceptMessagesAndInputLine(s)
+	clearBigTimerArea(s)
 	msg := fmt.Sprintf("%02d:%02d", min, sec)
 	height := len(bigFont['0'])
 	width := 0
@@ -244,4 +245,18 @@ func wrapText(text string, maxWidth int) []string {
 	}
 	lines = append(lines, current)
 	return lines
+}
+
+func clearBigTimerArea(s tcell.Screen) {
+	height := len(bigFont['0']) // 7 строк у цифры
+	scrWidth, scrHeight := s.Size()
+	startY := int(math.Max(float64((scrHeight-height)/2-2), 1)) // как в drawCenteredBigTimer
+
+	for y := startY; y < startY+height; y++ {
+		for x := 0; x < scrWidth; x++ {
+			s.SetContent(x, y, ' ', nil, tcell.StyleDefault)
+		}
+	}
+
+	s.Show()
 }
