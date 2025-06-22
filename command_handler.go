@@ -28,6 +28,9 @@ func (a *App) handleCommand(cmd Command, cmd_string string) bool {
 	case CmdSetPause, CmdSetTimer, CmdSetInterval, CmdSetLongPause:
 		a.handleSetCommand(cmd_string)
 
+	// case CmdSettings:
+	// 	showSettingsModal(a)
+
 	default:
 		userError(a.screen, "⭔ Неизвестная команда "+string(cmd), true)
 	}

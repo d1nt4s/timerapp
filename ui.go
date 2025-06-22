@@ -150,7 +150,7 @@ func clearInputLine(screen tcell.Screen) {
 }
 
 func clearUserLines(s tcell.Screen) {
-	for y := 18; y <= 20; y++ {
+	for y := 17; y <= 20; y++ {
 		w, _ := s.Size()
 		for x := 0; x < w; x++ {
 			s.SetContent(x, y, ' ', nil, tcell.StyleDefault)

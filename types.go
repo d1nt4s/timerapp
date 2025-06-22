@@ -26,27 +26,29 @@ const (
 )
 
 const (
-	CmdStop   Command = "stop"
-	CmdReset  Command = "reset"
-	CmdPause  Command = "pause"
-	CmdResume Command = "resume"
-	CmdExit   Command = "exit"
-	CmdSkip   Command = "skip"
-	CmdHelp   Command = "help"
+	CmdStop   		Command = "stop"
+	CmdReset  		Command = "reset"
+	CmdPause  		Command = "pause"
+	CmdResume 		Command = "resume"
+	CmdExit   		Command = "exit"
+	CmdSkip   		Command = "skip"
+	CmdHelp   		Command = "help"
 	CmdSetTimer     Command = "set_timer"
 	CmdSetPause     Command = "set_pause"
 	CmdSetInterval  Command = "set_interval"
 	CmdSetLongPause Command = "set_long_pause"
-	CmdStart  Command = "start"
+	CmdStart  		Command = "start"
+	CmdSettings 	Command = "settings"
 )
 
 var commandMap = map[string]Command{
-	"stop":   CmdStop,
-	"reset":  CmdReset,
-	"pause":  CmdPause,
-	"resume": CmdResume,
-	"exit":   CmdExit,
-	"skip":   CmdSkip,
-	"help":   CmdHelp,
-	"start": CmdStart,
+	"stop":   	CmdStop,
+	"reset":  	CmdReset,
+	"pause":  	CmdPause,
+	"resume": 	CmdResume,
+	"exit":   	CmdExit,
+	"skip":   	CmdSkip,
+	"help":   	CmdHelp,
+	"start":  	CmdStart,
+	"settings": CmdSettings,
 }

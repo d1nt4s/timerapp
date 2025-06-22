@@ -1,3 +1,0 @@
-[06-22 19:21:39.453 app.go:89 (*App).startTimer.func1.1] 🟢 timer.run завершается
-[06-22 19:21:41.620 app.go:89 (*App).startTimer.func1.1] 🟢 timer.run завершается
-[06-22 19:21:44.567 app.go:89 (*App).startTimer.func1.1] 🟢 timer.run завершается
