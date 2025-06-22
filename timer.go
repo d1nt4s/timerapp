@@ -111,5 +111,6 @@ func (t *Timer) changeMode(s tcell.Screen) {
 		t.mode = Pomodoro
 	}
 
+	t.onFinish(s)
 	t.status = Continued
 }

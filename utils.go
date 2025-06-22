@@ -1,9 +1,13 @@
 package main
 
 import (
+	"fmt"
+	"os/exec"
 	"strconv"
 	"strings"
-	"fmt"
+	"time"
+
+	"github.com/gdamore/tcell/v2"
 )
 
 func ParseCommand(input string) (Command, string, bool) {
@@ -100,4 +104,19 @@ func parseIntFromCommand(input, prefix string) (int, bool) {
 		return 0, false
 	}
 	return val, true
+}
+
+func (t *Timer) onFinish(screen tcell.Screen) {
+	// 1. Звук
+	for i := 0; i < 3; i++ {
+		fmt.Print("\a")
+		time.Sleep(500 * time.Millisecond)
+	}
+
+	// 3. Системное уведомление (если хочется)
+	exec.Command("terminal-notifier", "-title", "Pomodoro", "-message", "Таймер завершён!").Run()
+	// err := exec.Command("osascript", "-e", "display notification \"Таймер завершён!\" with title \"Pomodoro\"").Run()
+	// if err != nil {
+	// 	Debug(err.Error())
+	// }
 }
